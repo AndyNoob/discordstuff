@@ -1,0 +1,5 @@
+name: DiscordStuff
+version: '${project.version}'
+main: me.comfortable_andy.discordstuff.Main
+api-version: 1.16
+authors: [ Comfortable_Andy ]
