@@ -5,6 +5,6 @@ import org.bukkit.ChatColor;
 
 public class MarkdownBold extends Markdown {
     public MarkdownBold() {
-        super("bold", ChatColor.BOLD, "\\*\\*");
+        super("bold", ChatColor.BOLD, 0, "**");
     }
 }

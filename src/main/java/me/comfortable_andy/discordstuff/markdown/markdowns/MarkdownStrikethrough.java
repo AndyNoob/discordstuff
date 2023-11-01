@@ -5,6 +5,6 @@ import org.bukkit.ChatColor;
 
 public class MarkdownStrikethrough extends Markdown {
     public MarkdownStrikethrough() {
-        super("strikethrough", ChatColor.STRIKETHROUGH, "\\~\\~");
+        super("strikethrough", ChatColor.STRIKETHROUGH, 2, "~~");
     }
 }

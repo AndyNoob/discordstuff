@@ -8,12 +8,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class ChatListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        String input = event.getMessage();
-
-        for (Markdown markdown : Markdown.MARKDOWNS.values()) {
-            input = markdown.check(input);
-        }
-
-        event.setMessage(input);
+        event.setMessage(Markdown.convert(event.getMessage()));
     }
 }

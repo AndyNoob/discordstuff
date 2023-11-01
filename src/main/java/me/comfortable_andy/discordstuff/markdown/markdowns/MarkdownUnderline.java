@@ -5,6 +5,6 @@ import org.bukkit.ChatColor;
 
 public class MarkdownUnderline extends Markdown {
     public MarkdownUnderline() {
-        super("underline", ChatColor.UNDERLINE, "\\_\\_");
+        super("underline", ChatColor.UNDERLINE, 1, "__");
     }
 }
