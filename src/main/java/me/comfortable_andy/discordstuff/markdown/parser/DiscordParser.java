@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
 public class DiscordParser extends MarkdownParser {
 
     @Override
-    public String parse(String input) {
-        return this.parse0(input, Collections.emptyList());
+    public String parse(String input, boolean keepTriggers) {
+        return this.parse0(input, keepTriggers, Collections.emptyList());
     }
 
-    public String parse0(String input, List<ChatColor> currentColors) {
+    public String parse0(String input, boolean keep, List<ChatColor> currentColors) {
         final StringBuilder builder = new StringBuilder();
         final Matcher matcher = getPattern().matcher(input);
 
@@ -35,14 +35,17 @@ public class DiscordParser extends MarkdownParser {
 
         while (matcher.find()) {
             final int trueStart = matcher.start();
+            final int contentStart = matcher.start(2);
+            final int contentEnd = matcher.end(2);
             final int trueEnd = matcher.end();
             final ChatColor color = findColor(matcher.group(1));
             final List<ChatColor> colors = new ArrayList<>(currentColors);
             colors.add(color);
             builder
-                    .append(left, 0, trueStart)
+                    .append(left, 0, keep ? contentStart : trueStart)
                     .append(color)
-                    .append(this.parse0(matcher.group(2), colors))
+                    .append(this.parse0(matcher.group(2), keep, colors))
+                    .append(left, keep ? contentEnd : 0, keep ? trueEnd : 0)
                     .append(ChatColor.RESET)
                     .append(currentColors.stream().map(ChatColor::toString).collect(Collectors.joining()));
             left = left.substring(trueEnd);

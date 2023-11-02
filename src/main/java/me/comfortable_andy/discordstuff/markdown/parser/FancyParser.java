@@ -11,7 +11,7 @@ import java.util.List;
 public class FancyParser extends MarkdownParser {
 
     @Override
-    public String parse(String input) {
+    public String parse(String input, boolean keepTriggers) {
         final Markdown[] markdowns = Markdown.getOrderedMarkdowns();
         final List<MarkdownRegion> regions = new ArrayList<>();
         final StringBuilder builder = new StringBuilder();
@@ -42,11 +42,14 @@ public class FancyParser extends MarkdownParser {
 
                         left = left.substring(s.length());
                         builder.append(markdown.getColor());
+                        if (keepTriggers) builder.append(s);
                         regions.add(new MarkdownRegion(markdown, s, builder.lastIndexOf("")));
                     } else {
+                        // wasn't the one we found when recording opening one
                         if (Character.isWhitespace(last)) continue;
 
                         left = left.substring(s.length());
+                        if (keepTriggers) builder.append(s);
                         builder.append(ChatColor.RESET);
                         regions.stream()
                                 .filter(reg -> reg != region)
