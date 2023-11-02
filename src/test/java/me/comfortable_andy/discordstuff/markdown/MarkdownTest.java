@@ -4,6 +4,7 @@ import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownBold;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownItalic;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownStrikethrough;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownUnderline;
+import me.comfortable_andy.discordstuff.markdown.parser.DiscordParser;
 import me.comfortable_andy.discordstuff.markdown.parser.FancyParser;
 import org.bukkit.ChatColor;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,7 +23,7 @@ public class MarkdownTest {
     }
 
     @Test
-    public void check() {
+    public void testFancy() {
         String input = "This is a **te~~st** of~~ *markdown* and ~~it's~~ __working__!";
         String expected = "This is a " + ChatColor.BOLD + "te" + ChatColor.STRIKETHROUGH + "st" + ChatColor.RESET + ChatColor.STRIKETHROUGH + " of" + ChatColor.RESET + " " + ChatColor.ITALIC + "markdown" + ChatColor.RESET + " and " + ChatColor.STRIKETHROUGH + "it's" + ChatColor.RESET + " " + ChatColor.UNDERLINE + "working" + ChatColor.RESET + "!";
 
@@ -32,11 +33,29 @@ public class MarkdownTest {
         expected = input;
 
         assertEquals(expected, new FancyParser().parse(input));
-        /*assertEquals(expected, new DiscordParser().parse(expected));*/
 
         input = "**AHHH**";
         expected = ChatColor.BOLD + "AHHH" + ChatColor.RESET;
 
         assertEquals(expected, new FancyParser().parse(input));
     }
+
+    @Test
+    public void testDiscord() {
+        String input = "1 * 2 * 3 = 6";
+        String expected = input;
+
+        assertEquals(expected, new DiscordParser().parse(expected));
+
+        input = "**AHHH**";
+        expected = ChatColor.BOLD + "AHHH" + ChatColor.RESET;
+
+        assertEquals(expected, new DiscordParser().parse(input));
+
+        input = "This is a **te~~st** of~~ *markdown* and ~~it's~~ __working__!";
+        expected = "This is a " + ChatColor.BOLD + "te~~st" + ChatColor.RESET + " of" + ChatColor.STRIKETHROUGH + " " + ChatColor.ITALIC + "markdown" + ChatColor.RESET + ChatColor.STRIKETHROUGH + " and " + ChatColor.RESET + "it's~~ " + ChatColor.UNDERLINE + "working" + ChatColor.RESET + "!";
+
+        assertEquals(expected, new DiscordParser().parse(input));
+    }
+
 }
