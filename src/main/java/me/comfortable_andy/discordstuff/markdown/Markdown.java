@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Data
 public abstract class Markdown implements Comparable<Markdown> {
@@ -40,7 +41,7 @@ public abstract class Markdown implements Comparable<Markdown> {
 
     public static MarkdownParser getParser() {
         try {
-            return MarkdownParser.Type.valueOf(Main.getInstance().getConfig().getString("parser", "fancy").toUpperCase()).getSupplier().get();
+            return Optional.ofNullable(MarkdownParser.Type.find(Main.getInstance().getConfig().getString("parser", "fancy").toUpperCase())).orElse(MarkdownParser.Type.OFF).getSupplier().get();
         } catch (IllegalArgumentException e) {
             return new FancyParser();
         }

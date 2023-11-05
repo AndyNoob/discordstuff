@@ -15,8 +15,13 @@ permissions:
       - discordstuff.commands.plugin.test
   discordstuff.commands.plugin.reload:
     description: Allows the user to reload the plugin
+    default: op
   discordstuff.commands.plugin.test:
     description: Allows the user to test the markdown
+    default: op
+  discordstuff.commands.plugin.switch:
+    description: Allows the user to switch the markdown parser
+    default: op
 
 commands:
   discordstuff:

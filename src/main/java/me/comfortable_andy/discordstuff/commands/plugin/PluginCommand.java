@@ -2,6 +2,7 @@ package me.comfortable_andy.discordstuff.commands.plugin;
 
 import me.comfortable_andy.discordstuff.Main;
 import me.comfortable_andy.discordstuff.markdown.Markdown;
+import me.comfortable_andy.discordstuff.markdown.parser.MarkdownParser;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,9 +22,20 @@ public class PluginCommand implements TabExecutor {
             sender.sendMessage(Markdown.convert("__Re__**loaded**!"));
         });
         runIf(permCheck(sender, "test") && matchArg(0, "test", args), () -> {
-            sender.sendMessage("Output in " + Markdown.getParser().getClass().getSimpleName() + ChatColor.BOLD + "==>" + ChatColor.RESET + " \"" + Markdown.convert(String.join(" ", collect(1, args))) + "\"");
+            sender.sendMessage("Output in " + Markdown.getParser().getClass().getSimpleName() + ChatColor.BOLD + " ==>" + ChatColor.RESET + " " + Markdown.convert(String.join(" ", collect(1, args))) + ChatColor.BOLD + "<==");
         });
-        return false;
+        runIf(permCheck(sender, "switch") && matchArg(0, "switch", args), () -> {
+            final String parser = getArg(1, args);
+            final MarkdownParser.Type type = MarkdownParser.Type.find(parser.toUpperCase());
+            if (type == null) {
+                sender.sendMessage(ChatColor.BOLD + "Unknown parser: " + ChatColor.RED + parser);
+            } else {
+                Main.getInstance().getConfig().set("parser", type.name());
+                Main.getInstance().saveConfig();
+                sender.sendMessage(ChatColor.BOLD + "Set parser to: " + ChatColor.GREEN + type.name().toLowerCase());
+            }
+        });
+        return true;
     }
 
     @Override
@@ -36,6 +48,14 @@ public class PluginCommand implements TabExecutor {
             runIf(permCheck(commandSender, "test"), () -> {
                 result.add("test");
             });
+            runIf(permCheck(commandSender, "switch"), () -> {
+                result.add("switch");
+            });
+        });
+        runIf(strings.length == 2 && matchArg(0, "switch", strings), () -> {
+            for (MarkdownParser.Type type : MarkdownParser.Type.values()) {
+                result.add(type.name());
+            }
         });
         return StringUtil.copyPartialMatches(latest(strings), result, new ArrayList<>());
     }

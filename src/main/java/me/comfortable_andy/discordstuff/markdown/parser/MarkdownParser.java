@@ -31,6 +31,14 @@ public abstract class MarkdownParser {
         Type(Supplier<MarkdownParser> supplier) {
             this.supplier = supplier;
         }
+
+        public static Type find(String name) {
+            for (Type type : values()) {
+                if (type.name().equalsIgnoreCase(name)) return type;
+            }
+            return null;
+        }
+
     }
 
 }
