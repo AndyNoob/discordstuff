@@ -1,7 +1,9 @@
 package me.comfortable_andy.discordstuff.markdown;
 
 import lombok.Data;
+import me.comfortable_andy.discordstuff.Main;
 import me.comfortable_andy.discordstuff.markdown.parser.FancyParser;
+import me.comfortable_andy.discordstuff.markdown.parser.MarkdownParser;
 import org.bukkit.ChatColor;
 
 import java.util.HashMap;
@@ -16,6 +18,7 @@ public abstract class Markdown implements Comparable<Markdown> {
     protected final ChatColor color;
     protected final String[] characters;
     protected final int orderIndex;
+    protected boolean mustHaveSpaceAfter = false;
 
     public Markdown(String name, ChatColor color, int orderIndex, String... characters) {
         this.name = name;
@@ -32,7 +35,15 @@ public abstract class Markdown implements Comparable<Markdown> {
     }
 
     public static String convert(String input) {
-        return new FancyParser().parse(input);
+        return getParser().parse(input);
+    }
+
+    public static MarkdownParser getParser() {
+        try {
+            return MarkdownParser.Type.valueOf(Main.getInstance().getConfig().getString("parser", "fancy").toUpperCase()).getSupplier().get();
+        } catch (IllegalArgumentException e) {
+            return new FancyParser();
+        }
     }
 
     public static Markdown[] getOrderedMarkdowns() {

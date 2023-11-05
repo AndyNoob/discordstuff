@@ -1,7 +1,36 @@
 package me.comfortable_andy.discordstuff.markdown.parser;
 
+import lombok.Getter;
+
+import java.util.function.Supplier;
+
 public abstract class MarkdownParser {
 
-    public abstract String parse(String input);
+    public String parse(String input) {
+        return parse(input, false);
+    }
+
+    public abstract String parse(String input, boolean keepTriggers);
+
+    private static class OffParser extends MarkdownParser {
+        @Override
+        public String parse(String input, boolean keepTriggers) {
+            return input;
+        }
+    }
+
+    @Getter
+    public enum Type {
+        FANCY(FancyParser::new),
+        DISCORD(DiscordParser::new),
+        OFF(OffParser::new)
+        ;
+
+        private final Supplier<MarkdownParser> supplier;
+
+        Type(Supplier<MarkdownParser> supplier) {
+            this.supplier = supplier;
+        }
+    }
 
 }

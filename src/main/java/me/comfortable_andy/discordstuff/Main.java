@@ -1,10 +1,12 @@
 package me.comfortable_andy.discordstuff;
 
-import me.comfortable_andy.discordstuff.command.QuickCommand;
-import me.comfortable_andy.discordstuff.command.commands.CommandShrug;
-import me.comfortable_andy.discordstuff.command.commands.CommandTableflip;
-import me.comfortable_andy.discordstuff.command.commands.CommandUnflip;
+import me.comfortable_andy.discordstuff.commands.discord.AppendingCommand;
+import me.comfortable_andy.discordstuff.commands.discord.CommandShrug;
+import me.comfortable_andy.discordstuff.commands.discord.CommandTableflip;
+import me.comfortable_andy.discordstuff.commands.discord.CommandUnflip;
+import me.comfortable_andy.discordstuff.commands.plugin.PluginCommand;
 import me.comfortable_andy.discordstuff.listener.ChatListener;
+import me.comfortable_andy.discordstuff.listener.TabCompletionListener;
 import me.comfortable_andy.discordstuff.markdown.Markdown;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownBold;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownItalic;
@@ -19,8 +21,7 @@ public final class Main extends JavaPlugin {
 
     private static Main INSTANCE;
 
-    private final List<Class<? extends QuickCommand>> commands = Arrays.asList(CommandShrug.class
-            , CommandTableflip.class, CommandUnflip.class);
+    private final List<Class<? extends AppendingCommand>> commands = Arrays.asList(CommandShrug.class, CommandTableflip.class, CommandUnflip.class);
     private final List<Class<? extends Markdown>> markdowns = Arrays.asList(MarkdownBold.class,
             MarkdownItalic.class, MarkdownUnderline.class, MarkdownStrikethrough.class);
 
@@ -28,9 +29,13 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
 
-        registerMarkdowns();
+        saveDefaultConfig();
+
+        getCommand("discordstuff").setExecutor(new PluginCommand());
+
+        makeInstance(this.markdowns);
+        makeInstance(this.commands);
         registerListeners();
-        registerCommands();
     }
 
     @Override
@@ -38,8 +43,8 @@ public final class Main extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    private void registerMarkdowns() {
-        for (Class<? extends Markdown> clazz : markdowns) {
+    private <T> void makeInstance(List<Class<? extends T>> classes) {
+        for (Class<?> clazz : classes) {
             try {
                 clazz.newInstance();
             } catch (ReflectiveOperationException e) {
@@ -48,18 +53,9 @@ public final class Main extends JavaPlugin {
         }
     }
 
-    private void registerCommands() {
-        for (Class<? extends QuickCommand> clazz : commands) {
-            try {
-                clazz.newInstance();
-            } catch (Exception e) {
-                getLogger().warning("Unable to register \"" + clazz.getSimpleName() + "\"!");
-            }
-        }
-    }
-
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        getServer().getPluginManager().registerEvents(new TabCompletionListener(), this);
     }
 
     public static Main getInstance() {

@@ -6,5 +6,6 @@ import org.bukkit.ChatColor;
 public class MarkdownItalic extends Markdown {
     public MarkdownItalic() {
         super("italic", ChatColor.ITALIC, 3, "*", "_");
+        this.mustHaveSpaceAfter = true;
     }
 }

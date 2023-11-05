@@ -38,6 +38,23 @@ public class MarkdownTest {
         expected = ChatColor.BOLD + "AHHH" + ChatColor.RESET;
 
         assertEquals(expected, new FancyParser().parse(input));
+
+        assertEquals("__", new FancyParser().parse("__"));
+
+        assertEquals("~~", new FancyParser().parse("~~"));
+
+        assertEquals("**", new FancyParser().parse("**"));
+
+        assertEquals("*something", new FancyParser().parse("*something"));
+
+        input = "__Re__**loaded**!";
+        expected = ChatColor.UNDERLINE + "Re" + ChatColor.RESET + ChatColor.BOLD + "loaded" + ChatColor.RESET + "!";
+
+        assertEquals(expected, new FancyParser().parse(input));
+
+        assertEquals(ChatColor.BOLD + "" + ChatColor.RESET, new FancyParser().parse("****"));
+
+        assertEquals("***", new FancyParser().parse("***"));
     }
 
     @Test

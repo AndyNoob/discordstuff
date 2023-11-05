@@ -1,0 +1,19 @@
+# Permssions for these are "discordstuff.commands.<name>",
+# all under parent of "discordstuff.commands.*"
+# If a command is disabled, the command will still register and appear on tab completion,
+# but will not be usable
+commands:
+  shrug: # appends "¯\_(ツ)_/¯" to the end of the message
+    enabled: true
+  tableflip: # appends "(╯°□°）╯︵ ┻━┻" to the end of the message
+    enabled: true
+  unflip: # appends "┬─┬ ノ( ゜-゜ノ)" to the end of the message
+    enabled: true
+
+# could be either FANCY or DISCORD or OFF (which is just turning this off)
+# FANCY allows for more sophisticated formatting
+# while DISCORD more closely resembles the discord formatting
+# (e.g. "Hello, **world**!" would be "Hello, <bold>world</bold>!" in both)
+# (but "**He__llo**, world__!" would be "<bold>He<underline>llo</underline></bold><underline>, world</underline!" in FANCY)
+# (and "<bold>He__llo</bold>, world__!" in DISCORD)
+parser: fancy

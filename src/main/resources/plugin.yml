@@ -3,3 +3,25 @@ version: '${project.version}'
 main: me.comfortable_andy.discordstuff.Main
 api-version: 1.16
 authors: [ Comfortable_Andy ]
+permissions:
+  discordstuff.commands.*:
+    description: Allows the user to use all message commands under this plugin
+    default: true
+  discordstuff.commands.plugin:
+    description: Allows the user to use the plugin command
+    default: op
+    children:
+      - discordstuff.commands.plugin.reload
+      - discordstuff.commands.plugin.test
+  discordstuff.commands.plugin.reload:
+    description: Allows the user to reload the plugin
+  discordstuff.commands.plugin.test:
+    description: Allows the user to test the markdown
+
+commands:
+  discordstuff:
+    description: Plugin command for DiscordStuff
+    permission: discordstuff.commands.plugin
+    aliases:
+      - stuff
+      - ds
