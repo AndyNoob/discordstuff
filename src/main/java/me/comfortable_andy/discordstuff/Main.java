@@ -55,7 +55,6 @@ public final class Main extends JavaPlugin {
 
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
-        getServer().getPluginManager().registerEvents(new TabCompletionListener(), this);
     }
 
     public static Main getInstance() {
