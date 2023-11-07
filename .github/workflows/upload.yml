@@ -1,0 +1,65 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Build and Uploading
+
+on:
+  push:
+    branches:
+    - main
+    - upload-ci-test
+
+jobs:
+  check-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Match commit message"
+        id: match
+        uses: kaisugi/action-regex-match@v1.0.0
+        with:
+          text: ${{ github.event.head_commit.message }}
+          regex: '[bB]ump.*?(\d+(\.\d+)*)'
+      - run: echo 'New version is ${{ steps.match.outputs.group1 }}'
+    outputs:
+      new_ver: ${{ steps.match.outputs.group1 }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Compiling for version ${{ needs.check-commit.outputs.new_ver }}'
+      - uses: actions/checkout@v3
+      - name: "Set up java"
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto' # See 'Supported distributions' for available options
+          java-version: '17'
+          cache: maven
+      - name: "Build the jar"
+        run: mvn --batch-mode --update-snapshots verify
+      - name: "Upload artifact"
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ needs.check-commit.outputs.new_ver }} jar
+          path: target/!original-*.jar
+#  upload-curseforge:
+#    runs-on: ubuntu-latest
+#    if: ${{ needs.check-commit.env.NEW_VERSION != '' }}
+#    steps:
+#      - name: "Extract changelog"
+#        id: extract-changelog
+#        uses: sean0x42/markdown-extract@v2
+#        with:
+#         file: CHANGELOG.md
+#         pattern: ${{ needs.check-commit.env.NEW_VERSION }}
+#      - name: "Upload to CurseForge"
+#        uses: itsmeow/curseforge-upload@3.1.1
+#        with:
+#          token: "${{ secrets.CURSEFORGE_TOKEN }}"
+#          project_id: 933999
+#          game_endpoint: "minecraft"
+#          file_path: target/!original-*.jar
+#          changelog: ${{ steps.extract-changelog.outputs.markdown }}
