@@ -30,7 +30,7 @@ jobs:
           regex: '[bB]ump.*?(\d+(\.\d+)*)'
       - name: "Exit if no match"
         if: ${{ steps.match.outputs.group1 == '' }}
-        run: echo "Not a new version" && exit 0
+        run: echo "Not a new version" && exit 1
       - name: "Extract changelog"
         id: extract-changelog
         uses: sean0x42/markdown-extract@v2
