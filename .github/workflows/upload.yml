@@ -18,24 +18,38 @@ jobs:
   check-commit:
     runs-on: ubuntu-latest
     steps:
+      - name: "Checking out"
+        uses: actions/checkout@v3
       - name: "Match commit message"
         id: match
         uses: kaisugi/action-regex-match@v1.0.0
         with:
           text: ${{ github.event.head_commit.message }}
           regex: '[bB]ump.*?(\d+(\.\d+)*)'
-      - run: echo 'New version is ${{ steps.match.outputs.group1 }}'
+      - name: "Exit if no match"
+        if: ${{ steps.match.outputs.group1 == '' }}
+        run: echo "Not a new version" && exit 0
+      - name: "Extract changelog"
+        id: extract-changelog
+        uses: sean0x42/markdown-extract@v2
+        with:
+          file: CHANGELOG.md
+          pattern: ${{ steps.match.outputs.group1 }}
+      - name: "Log changelog"
+        run: echo '${{ steps.extract-changelog.outputs.markdown }}'
     outputs:
       new_ver: ${{ steps.match.outputs.group1 }}
+      changelog: ${{ steps.extract-changelog.outputs.markdown }}
   build:
     needs:
       - check-commit
     runs-on: ubuntu-latest
     if: ${{ needs.check-commit.outputs.new_ver != '' }}
     steps:
-      - run: echo '$GITHUB_WORKSPACE'
-      - run: echo 'Compiling for version ${{ needs.check-commit.outputs.new_ver }}'
-      - uses: actions/checkout@v3
+      - name: "Display version"
+        run: echo 'Compiling for version ${{ needs.check-commit.outputs.new_ver }}'
+      - name: "Checking out"
+        uses: actions/checkout@v3
       - name: "Set up java"
         uses: actions/setup-java@v3
         with:
@@ -58,37 +72,68 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.check-commit.outputs.new_ver != '' }}
     steps:
-      - uses: actions/checkout@v3
-      - name: "Extract changelog"
-        id: extract-changelog
-        uses: sean0x42/markdown-extract@v2
-        with:
-         file: CHANGELOG.md
-         pattern: ${{ needs.check-commit.outputs.new_ver }}
-      - name: "Log changelog"
-        run: echo '${{ steps.extract-changelog.outputs.markdown }}'
-      - uses: actions/download-artifact@v3
+      - name: "Downloading built jar"
+        uses: actions/download-artifact@v3
         with:
           name: ${{ needs.check-commit.outputs.new_ver }}
-      - name: Display structure of downloaded files
+      - name: "Display structure of downloaded files"
         run: ls -R
-      - name: Create Release
+      - name: "Create Release"
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
           tag_name: v${{ needs.check-commit.outputs.new_ver }}
           name: Release v${{ needs.check-commit.outputs.new_ver }}
-          body: ${{ steps.extract-changelog.outputs.markdown }}
+          body: ${{ needs.check-commit.outputs.changelog }}
           draft: false
           prerelease: false
           files: './target/*.jar'
           fail_on_unmatched_files: true
-#      - name: "Upload to CurseForge"
-#        uses: itsmeow/curseforge-upload@3.1.1
-#        with:
-#          token: ${{ secrets.CURSEFORGE_TOKEN }}
-#          project_id: 933999
-#          game_endpoint: "minecraft"
-#          file_path:
-#          changelog: ${{ steps.extract-changelog.outputs.markdown }}
+  upload-curseforge:
+    needs:
+      - check-commit
+      - build
+    runs-on: ubuntu-latest
+    if: ${{ needs.check-commit.outputs.new_ver != '' }}
+    steps:
+      - name: "Downloading built jar"
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.check-commit.outputs.new_ver }}
+      - name: "Display structure of downloaded files"
+        run: ls -R
+      - name: "Upload to CurseForge"
+        uses: itsmeow/curseforge-upload@3.1.1
+        with:
+          token: ${{ secrets.CURSEFORGE_TOKEN }}
+          project_id: 933999
+          game_endpoint: "minecraft"
+          file_path: $(find * -name '*.jar')
+          changelog: ${{ needs.check-commit.outputs.changelog }}
+  upload-modrinth:
+    needs:
+      - check-commit
+      - build
+    runs-on: ubuntu-latest
+    if: ${{ needs.check-commit.outputs.new_ver != '' }}
+    steps:
+      - name: "Downloading built jar"
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.check-commit.outputs.new_ver }}
+      - name: "Display structure of downloaded files"
+        run: ls -R
+      - name: Upload to Modrinth
+        uses: RubixDev/modrinth-upload@v1
+        with:
+          token: ${{ secrets.MODRINTH_TOKEN }}
+          file_path: $(find * -name '*.jar')
+          name: Release v${{ needs.check-commit.outputs.new_ver }}
+          version: ${{ needs.check-commit.outputs.new_ver }}
+          changelog: ${{ needs.check-commit.outputs.changelog }}
+          game_versions: 1.16,1.16.1,1.16.2,1.16.3,1.16.4,1.16.5,1.17,1.17.1,1.18,1.18.1,1.18.2,1.19,1.19.1,1.19.2,1.19.3,1.19.4,1.20,1.20.1,1.20.2
+          release_type: release
+          loaders: bukkit,spigot,paper
+          featured: true
+          project_id: XOp04Yi2
