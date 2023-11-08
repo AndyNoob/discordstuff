@@ -1,5 +1,8 @@
 # DiscordStuff
-Discord Markdowns and Commands like /shrug in Minecraft!
+[![spigotmc badge](https://img.shields.io/spiget/downloads/101113?logo=spigotmc&label=SpigotMC&color=%232c2c2c)](https://www.spigotmc.org/resources/discord-stuff.101113/)
+[![curseforge badge](https://img.shields.io/curseforge/dt/933999?logo=curseforge&label=Curseforge)](https://dev.bukkit.org/projects/discord-stuff)
+[![modrinth badge](https://img.shields.io/modrinth/dt/XOp04Yi2?logo=modrinth&label=Modrinth&color=%231bd96a)](https://modrinth.com/plugin/discord-stuff)
+<br>Discord Markdowns and Commands like /shrug in Minecraft!
 
 ## What does it do?
 ### Markdown
