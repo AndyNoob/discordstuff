@@ -71,8 +71,6 @@ jobs:
           name: ${{ needs.check-commit.outputs.new_ver }}
       - name: Display structure of downloaded files
         run: ls -R
-      - name: Checkout code
-        uses: actions/checkout@v3
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
