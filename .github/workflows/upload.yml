@@ -51,8 +51,9 @@ jobs:
           path: |
             **/*.jar
             !**/original-*.jar
-  upload-curseforge:
+  release:
     needs:
+      - check-commit
       - build
     runs-on: ubuntu-latest
     if: ${{ needs.check-commit.outputs.new_ver != '' }}
@@ -70,6 +71,20 @@ jobs:
           name: ${{ needs.check-commit.outputs.new_ver }}
       - name: Display structure of downloaded files
         run: ls -R
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          tag_name: v${{ needs.check-commit.outputs.new_ver }}
+          release_name: Release v${{ needs.check-commit.outputs.new_ver }}
+          body: ${{ steps.extract-changelog.outputs.markdown }}
+          draft: false
+          prerelease: false
+          files: '**/*.jar'
+          fail_on_unmatched_files: true
 #      - name: "Upload to CurseForge"
 #        uses: itsmeow/curseforge-upload@3.1.1
 #        with:
