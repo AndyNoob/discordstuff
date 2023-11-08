@@ -83,7 +83,7 @@ jobs:
           body: ${{ steps.extract-changelog.outputs.markdown }}
           draft: false
           prerelease: false
-          files: '**/*.jar'
+          files: './target/*.jar'
           fail_on_unmatched_files: true
 #      - name: "Upload to CurseForge"
 #        uses: itsmeow/curseforge-upload@3.1.1
