@@ -1,4 +1,5 @@
 # DiscordStuff
+<a href="https://github.com/AndyNoob/discordstuff/releases/" target="_blank">![github release](https://img.shields.io/github/v/release/AndyNoob/discordstuff?logo=github)</a>
 <a href="https://www.spigotmc.org/resources/discord-stuff.101113/" target="_blank">![spigotmc badge](https://img.shields.io/spiget/downloads/101113?logo=spigotmc&label=SpigotMC&color=%232c2c2c)</a>
 <a href="https://dev.bukkit.org/projects/discord-stuff" target="_blank">![curseforge badge](https://img.shields.io/curseforge/dt/933999?logo=curseforge&label=Curseforge)</a>
 <a href="https://modrinth.com/plugin/discord-stuff" target="_blank">![modrinth badge](https://img.shields.io/modrinth/dt/XOp04Yi2?logo=modrinth&label=Modrinth&color=%231bd96a)</a>
