@@ -74,6 +74,14 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.check-commit.outputs.new_ver != '' }}
     steps:
+      - uses: mukunku/tag-exists-action@v1.4.0
+        id: check_exists
+        with:
+          tag: v${{ needs.check-commit.outputs.new_ver }}
+          repo: 'actions/checkout'
+      - name: "Exit if release exists"
+        run: exit 1
+        if: steps.check_exists.outputs.exists == 'true'
       - name: "Downloading built jar"
         uses: actions/download-artifact@v3
         with:
