@@ -105,13 +105,15 @@ jobs:
           name: ${{ needs.check-commit.outputs.new_ver }}
       - name: "Display structure of downloaded files"
         run: ls -R
+      - id: find_jar
+        run: JAR_LOC="$(find * -name '*.jar')" && echo "jar_loc=$JAR_LOC" >> $GITHUB_OUTPUT
       - name: "Upload to CurseForge"
         uses: itsmeow/curseforge-upload@3.1.1
         with:
           token: ${{ secrets.CURSEFORGE_TOKEN }}
           project_id: 933999
           game_endpoint: "minecraft"
-          file_path: $(find * -name '*.jar')
+          file_path: steps.find_jar.outputs.jar_loc
           changelog: ${{ needs.check-commit.outputs.changelog }}
   upload-modrinth:
     needs:
@@ -126,11 +128,13 @@ jobs:
           name: ${{ needs.check-commit.outputs.new_ver }}
       - name: "Display structure of downloaded files"
         run: ls -R
+      - id: find_jar
+        run: JAR_LOC="$(find * -name '*.jar')" && echo "jar_loc=$JAR_LOC" >> $GITHUB_OUTPUT
       - name: Upload to Modrinth
         uses: RubixDev/modrinth-upload@v1
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
-          file_path: $(find * -name '*.jar')
+          file_path: steps.find_jar.outputs.jar_loc
           name: Release v${{ needs.check-commit.outputs.new_ver }}
           version: ${{ needs.check-commit.outputs.new_ver }}
           changelog: ${{ needs.check-commit.outputs.changelog }}
