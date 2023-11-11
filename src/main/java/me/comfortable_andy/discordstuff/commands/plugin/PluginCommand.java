@@ -24,8 +24,14 @@ public class PluginCommand implements TabExecutor {
         runIf(permCheck(sender, "test") && matchArg(0, "test", args), () -> {
             sender.sendMessage("Output in " + Markdown.getParser().getClass().getSimpleName() + ChatColor.BOLD + " ==>" + ChatColor.RESET + " " + Markdown.convert(String.join(" ", collect(1, args))) + ChatColor.BOLD + "<==");
         });
-        runIf(permCheck(sender, "switch") && matchArg(0, "switch", args), () -> {
+        runIf(permCheck(sender, "parser") && matchArg(0, "parser", args), () -> {
             final String parser = getArg(1, args);
+
+            if (parser.isEmpty()) {
+                sender.sendMessage(ChatColor.BOLD + "Current parser: " + ChatColor.GREEN + Markdown.getParser().name().toLowerCase());
+                return;
+            }
+
             final MarkdownParser.Type type = MarkdownParser.Type.find(parser.toUpperCase());
             if (type == null) {
                 sender.sendMessage(ChatColor.BOLD + "Unknown parser: " + ChatColor.RED + parser);
@@ -48,11 +54,11 @@ public class PluginCommand implements TabExecutor {
             runIf(permCheck(commandSender, "test"), () -> {
                 result.add("test");
             });
-            runIf(permCheck(commandSender, "switch"), () -> {
-                result.add("switch");
+            runIf(permCheck(commandSender, "parser"), () -> {
+                result.add("parser");
             });
         });
-        runIf(strings.length == 2 && matchArg(0, "switch", strings), () -> {
+        runIf(strings.length == 2 && matchArg(0, "parser", strings), () -> {
             for (MarkdownParser.Type type : MarkdownParser.Type.values()) {
                 result.add(type.name());
             }

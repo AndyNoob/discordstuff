@@ -36,14 +36,14 @@ public abstract class Markdown implements Comparable<Markdown> {
     }
 
     public static String convert(String input) {
-        return getParser().parse(input);
+        return getParser().getSupplier().get().parse(input);
     }
 
-    public static MarkdownParser getParser() {
+    public static MarkdownParser.Type getParser() {
         try {
-            return Optional.ofNullable(MarkdownParser.Type.find(Main.getInstance().getConfig().getString("parser", "fancy").toUpperCase())).orElse(MarkdownParser.Type.OFF).getSupplier().get();
+            return Optional.ofNullable(MarkdownParser.Type.find(Main.getInstance().getConfig().getString("parser", "fancy").toUpperCase())).orElse(MarkdownParser.Type.OFF);
         } catch (IllegalArgumentException e) {
-            return new FancyParser();
+            return MarkdownParser.Type.FANCY;
         }
     }
 
