@@ -78,7 +78,6 @@ jobs:
         id: check_exists
         with:
           tag: v${{ needs.check-commit.outputs.new_ver }}
-          repo: 'actions/checkout'
       - name: "Exit if release exists"
         run: exit 1
         if: steps.check_exists.outputs.exists == 'true'
@@ -121,7 +120,7 @@ jobs:
           token: ${{ secrets.CURSEFORGE_TOKEN }}
           project_id: 933999
           game_endpoint: "minecraft"
-          file_path: steps.find_jar.outputs.jar_loc
+          file_path: ${{ steps.find_jar.outputs.jar_loc }}
           changelog: ${{ needs.check-commit.outputs.changelog }}
   upload-modrinth:
     needs:
@@ -142,7 +141,7 @@ jobs:
         uses: RubixDev/modrinth-upload@v1
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
-          file_path: steps.find_jar.outputs.jar_loc
+          file_path: ${{ steps.find_jar.outputs.jar_loc }}
           name: Release v${{ needs.check-commit.outputs.new_ver }}
           version: ${{ needs.check-commit.outputs.new_ver }}
           changelog: ${{ needs.check-commit.outputs.changelog }}
