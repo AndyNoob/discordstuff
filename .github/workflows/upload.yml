@@ -17,10 +17,6 @@ jobs:
   check-commit:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checking out"
-        uses: actions/checkout@v3
-      - name: "List files"
-        run: ls -R
       - name: "Match commit message"
         id: match
         uses: kaisugi/action-regex-match@v1.0.0
@@ -32,6 +28,10 @@ jobs:
         run: |
           echo 'Not a new version.' > $GITHUB_STEP_SUMMARY
           exit 1
+      - name: "Checking out"
+        uses: actions/checkout@v3
+      - name: "List files"
+        run: ls -R
       - name: "Extract changelog"
         id: extract-changelog
         uses: sean0x42/markdown-extract@v2
