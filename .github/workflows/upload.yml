@@ -12,7 +12,6 @@ on:
   push:
     branches:
     - main
-    - upload-ci-test
 
 jobs:
   check-commit:
@@ -30,15 +29,20 @@ jobs:
           regex: '[bB]ump.*?(\d+(\.\d+)*)'
       - name: "Exit if no match"
         if: ${{ steps.match.outputs.group1 == '' }}
-        run: echo "Not a new version" && exit 1
+        run: |
+          echo 'Not a new version.' > $GITHUB_STEP_SUMMARY
+          exit 1
       - name: "Extract changelog"
         id: extract-changelog
         uses: sean0x42/markdown-extract@v2
         with:
           file: CHANGELOG.md
           pattern: ${{ steps.match.outputs.group1 }}
-      - name: "Log changelog"
-        run: echo '${{ steps.extract-changelog.outputs.markdown }}'
+      - name: "Summary"
+        run: |
+          echo '# Version' >> $GITHUB_STEP_SUMMARY
+          echo '## Changelog' >> $GITHUB_STEP_SUMMARY
+          echo '${{ steps.extract-changelog.outputs.markdown }}' >> $GITHUB_STEP_SUMMARY
     outputs:
       new_ver: ${{ steps.match.outputs.group1 }}
       changelog: ${{ steps.extract-changelog.outputs.markdown }}
@@ -99,6 +103,10 @@ jobs:
           prerelease: false
           files: './target/*.jar'
           fail_on_unmatched_files: true
+      - name: "Summary"
+        run: |
+          echo '## GitHub Release' >> $GITHUB_STEP_SUMMARY
+          echo 'Release can be found at ${{ steps.create_release.outputs.url }}'
   upload-curseforge:
     needs:
       - check-commit
@@ -138,8 +146,9 @@ jobs:
         run: ls -R
       - id: find_jar
         run: JAR_LOC="$(find * -name '*.jar')" && echo "jar_loc=$JAR_LOC" >> $GITHUB_OUTPUT
-      - name: Upload to Modrinth
+      - name: "Upload to Modrinth"
         uses: RubixDev/modrinth-upload@v1
+        id: upload
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
           file_path: ${{ steps.find_jar.outputs.jar_loc }}
@@ -151,3 +160,7 @@ jobs:
           loaders: bukkit,spigot,paper
           featured: true
           project_id: XOp04Yi2
+      - name: "Summary"
+        run: |
+          echo '## Modrinth Release' >> $GITHUB_STEP_SUMMARY
+          echo 'Release can be found at https://modrinth.com/plugin/${{ steps.upload.with.project_id }}/version/${{ steps.upload.outputs.id }}' >> $GITHUB_STEP_SUMMARY
