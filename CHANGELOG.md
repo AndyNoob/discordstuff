@@ -1,3 +1,9 @@
+# v2.5
+```diff
++ /ds test is now appended with a version of the test message with the triggers included
++ Parsers now respect existing colors
+```
+
 # v2.4
 ```diff
 ~ Renamed plugin subcommand "switch" to parser

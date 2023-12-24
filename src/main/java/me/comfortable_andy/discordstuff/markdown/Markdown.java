@@ -2,7 +2,6 @@ package me.comfortable_andy.discordstuff.markdown;
 
 import lombok.Data;
 import me.comfortable_andy.discordstuff.Main;
-import me.comfortable_andy.discordstuff.markdown.parser.FancyParser;
 import me.comfortable_andy.discordstuff.markdown.parser.MarkdownParser;
 import org.bukkit.ChatColor;
 

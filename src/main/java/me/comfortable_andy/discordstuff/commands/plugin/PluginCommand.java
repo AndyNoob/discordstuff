@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings({"CodeBlock2Expr", "SameParameterValue"})
 public class PluginCommand implements TabExecutor {
 
     @Override
