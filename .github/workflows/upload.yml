@@ -122,7 +122,7 @@ jobs:
           game_endpoint: "minecraft"
           file_path: ${{ steps.find_jar.outputs.jar_loc }}
           changelog: ${{ needs.check-commit.outputs.changelog }}
-          game_versions: 1.16,1.17,1.18,1.18.1,1.18.2,1.19,1.19.1,1.19.2,1.19.3,1.19.4,1.20,1.20.1,1.20.2
+          game_versions: 1.16.5,1.17,1.18,1.18.1,1.18.2,1.19,1.19.1,1.19.2,1.19.3,1.19.4,1.20,1.20.1,1.20.2
   upload-modrinth:
     needs:
       - check-commit
