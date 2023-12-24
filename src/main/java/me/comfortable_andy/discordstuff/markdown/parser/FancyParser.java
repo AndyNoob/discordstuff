@@ -6,7 +6,6 @@ import me.comfortable_andy.discordstuff.util.StringUtil;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FancyParser extends MarkdownParser {
@@ -63,9 +62,11 @@ public class FancyParser extends MarkdownParser {
                 if (!region.isCompleted()) continue;
                 if (region.getStartInclusive() == i) {
                     builder.append(region.getMarkdown().getColor());
+                    if (keepTriggers) builder.append(region.getContent());
                     i += region.getContent().length();
                     continue character;
                 } else if (region.getEndExclusive() - region.getContent().length() == i) {
+                    if (keepTriggers) builder.append(region.getContent());
                     builder.append(ChatColor.RESET);
                     completed.stream().filter(reg -> reg != region && reg.containsEnd(region)).forEach(reg -> builder.append(reg.getMarkdown().getColor()));
                     i += region.getContent().length();

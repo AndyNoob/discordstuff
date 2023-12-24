@@ -22,7 +22,8 @@ public class PluginCommand implements TabExecutor {
             sender.sendMessage(Markdown.convert("__Re__**loaded**!"));
         });
         runIf(permCheck(sender, "test") && matchArg(0, "test", args), () -> {
-            sender.sendMessage("Output in " + ChatColor.GREEN + Markdown.getParser().name().toLowerCase() + ChatColor.RESET + ChatColor.GRAY + " ==>" + ChatColor.RESET + " " + Markdown.convert(String.join(" ", collect(1, args))) + ChatColor.GRAY + " <==");
+            final String input = String.join(" ", collect(1, args));
+            sender.sendMessage("Output in " + ChatColor.GREEN + Markdown.getParser().name().toLowerCase() + ChatColor.RESET + ChatColor.GRAY + " ==>" + ChatColor.RESET + " " + Markdown.convert(input) + ChatColor.GRAY + " <== (" + ChatColor.RESET + Markdown.convert(input, true) + ChatColor.GRAY + ")");
         });
         runIf(permCheck(sender, "parser") && matchArg(0, "parser", args), () -> {
             final String parser = getArg(1, args);

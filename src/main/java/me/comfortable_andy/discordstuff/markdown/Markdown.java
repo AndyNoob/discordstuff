@@ -36,7 +36,11 @@ public abstract class Markdown implements Comparable<Markdown> {
     }
 
     public static String convert(String input) {
-        return getParser().getSupplier().get().parse(input);
+        return convert(input, false);
+    }
+
+    public static String convert(String input, boolean keepTriggers) {
+        return getParser().getSupplier().get().parse(input, keepTriggers);
     }
 
     public static MarkdownParser.Type getParser() {

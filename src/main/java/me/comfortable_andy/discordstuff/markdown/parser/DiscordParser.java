@@ -42,8 +42,9 @@ public class DiscordParser extends MarkdownParser {
             final List<ChatColor> colors = new ArrayList<>(currentColors);
             colors.add(color);
             builder
-                    .append(left, 0, keep ? contentStart : trueStart)
+                    .append(left, 0, trueStart)
                     .append(color)
+                    .append(left, trueStart, keep ? contentStart : trueStart)
                     .append(this.parse0(matcher.group(2), keep, colors))
                     .append(left, keep ? contentEnd : 0, keep ? trueEnd : 0)
                     .append(ChatColor.RESET)
