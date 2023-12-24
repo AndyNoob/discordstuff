@@ -55,6 +55,11 @@ public class MarkdownTest {
         assertEquals(ChatColor.BOLD + "" + ChatColor.RESET, new FancyParser().parse("****"));
 
         assertEquals("***", new FancyParser().parse("***"));
+
+        input = "**sup " + ChatColor.RED + "you suck** boi";
+        expected = ChatColor.BOLD + "sup " + ChatColor.RED + "you suck" + ChatColor.RESET + ChatColor.RED + " boi";
+
+        assertEquals(expected, new FancyParser().parse(input));
     }
 
     @Test
@@ -71,6 +76,9 @@ public class MarkdownTest {
 
         input = "This is a **te~~st** of~~ *markdown* and ~~it's~~ __working__!";
         expected = "This is a " + ChatColor.BOLD + "te~~st" + ChatColor.RESET + " of" + ChatColor.STRIKETHROUGH + " " + ChatColor.ITALIC + "markdown" + ChatColor.RESET + ChatColor.STRIKETHROUGH + " and " + ChatColor.RESET + "it's~~ " + ChatColor.UNDERLINE + "working" + ChatColor.RESET + "!";
+
+        input = "**sup " + ChatColor.RED + "you suck** boi";
+        expected = ChatColor.BOLD + "sup " + ChatColor.RED + "you suck" + ChatColor.RESET + ChatColor.RED + " boi";
 
         assertEquals(expected, new DiscordParser().parse(input));
     }

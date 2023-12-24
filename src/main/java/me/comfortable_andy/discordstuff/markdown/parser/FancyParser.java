@@ -11,7 +11,7 @@ import java.util.List;
 public class FancyParser extends MarkdownParser {
 
     @Override
-    public String parse(String input, boolean keepTriggers) {
+    public String parse(final String input, boolean keepTriggers) {
         final Markdown[] markdowns = Markdown.getOrderedMarkdowns();
         final List<MarkdownRegion> incomplete = new ArrayList<>();
         final List<MarkdownRegion> completed = new ArrayList<>();
@@ -69,6 +69,7 @@ public class FancyParser extends MarkdownParser {
                     if (keepTriggers) builder.append(region.getContent());
                     builder.append(ChatColor.RESET);
                     completed.stream().filter(reg -> reg != region && reg.containsEnd(region)).forEach(reg -> builder.append(reg.getMarkdown().getColor()));
+                    builder.append(ChatColor.getLastColors(input.substring(0, region.getEndExclusive())));
                     i += region.getContent().length();
                     continue character;
                 }

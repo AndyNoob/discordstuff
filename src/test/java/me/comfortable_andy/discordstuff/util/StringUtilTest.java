@@ -1,6 +1,9 @@
 package me.comfortable_andy.discordstuff.util;
 
+import org.bukkit.ChatColor;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,6 +21,4 @@ public class StringUtilTest {
         assertTrue(StringUtil.backwardMatches("This is a test", 13, true, "test"));
         assertFalse(StringUtil.backwardMatches("This is a test", 14, true, "test"));
     }
-
-
 }

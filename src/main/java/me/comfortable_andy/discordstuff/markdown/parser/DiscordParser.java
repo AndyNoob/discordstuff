@@ -24,7 +24,7 @@ public class DiscordParser extends MarkdownParser {
 
     @Override
     public String parse(String input, boolean keepTriggers) {
-        return this.parse0(input, keepTriggers, Collections.emptyList());
+        return this.parse0(input, keepTriggers, new ArrayList<>());
     }
 
     public String parse0(String input, boolean keep, List<ChatColor> currentColors) {
@@ -39,6 +39,7 @@ public class DiscordParser extends MarkdownParser {
             final int contentEnd = matcher.end(2);
             final int trueEnd = matcher.end();
             final ChatColor color = findColor(matcher.group(1));
+            currentColors.addAll(convertFromStr(ChatColor.getLastColors(left.substring(0, trueEnd))));
             final List<ChatColor> colors = new ArrayList<>(currentColors);
             colors.add(color);
             builder

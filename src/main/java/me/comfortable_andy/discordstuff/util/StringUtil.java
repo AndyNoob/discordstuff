@@ -1,6 +1,26 @@
 package me.comfortable_andy.discordstuff.util;
 
+import org.bukkit.ChatColor;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class StringUtil {
+
+    private static final Pattern COLOR;
+
+    static {
+        try {
+            final Field field = ChatColor.class.getDeclaredField("STRIP_COLOR_PATTERN");
+            field.setAccessible(true);
+            COLOR = (Pattern) field.get(null);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static boolean forwardMatches(String str, int index, boolean inclusive, String pattern) {
         if (!inclusive) index++;
