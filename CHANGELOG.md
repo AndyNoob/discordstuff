@@ -1,6 +1,6 @@
 # v2.5.1
 ```diff
-- Removed test completion listener (somehow I didn't before)
+- Removed test completion listener
 ```
 
 # v2.5
