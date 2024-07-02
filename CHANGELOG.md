@@ -1,3 +1,8 @@
+# v2.5.1
+```diff
+- Removed test completion listener (somehow I didn't before)
+```
+
 # v2.5
 ```diff
 + /ds test is now appended with a version of the test message with the triggers included
