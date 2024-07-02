@@ -6,6 +6,7 @@ import me.comfortable_andy.discordstuff.commands.discord.CommandTableflip;
 import me.comfortable_andy.discordstuff.commands.discord.CommandUnflip;
 import me.comfortable_andy.discordstuff.commands.plugin.PluginCommand;
 import me.comfortable_andy.discordstuff.listener.ChatListener;
+import me.comfortable_andy.discordstuff.listener.JoinListener;
 import me.comfortable_andy.discordstuff.markdown.Markdown;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownBold;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownItalic;
@@ -54,6 +55,7 @@ public final class Main extends JavaPlugin {
 
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
     }
 
     public static Main getInstance() {

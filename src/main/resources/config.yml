@@ -17,3 +17,12 @@ commands:
 # (but "**He__llo**, world__!" would be "<bold>He<underline>llo</underline></bold><underline>, world</underline!" in FANCY)
 # (and "<bold>He__llo</bold>, world__!" in DISCORD)
 parser: fancy
+
+ping:
+  # see https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/ChatColor.html#enum-constant-summary
+  colors: [ BLUE, BOLD ]
+  sound:
+    name: "minecraft:entity.arrow.hit_player" # the first argument of the vanilla /playsound command, leave empty to disable
+    type: "MASTER" # any of https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/SoundCategory.html#enum-constant-summary
+    volume: 1
+    pitch: 1
