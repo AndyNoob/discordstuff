@@ -6,7 +6,6 @@ import me.comfortable_andy.discordstuff.commands.discord.CommandTableflip;
 import me.comfortable_andy.discordstuff.commands.discord.CommandUnflip;
 import me.comfortable_andy.discordstuff.commands.plugin.PluginCommand;
 import me.comfortable_andy.discordstuff.listener.ChatListener;
-import me.comfortable_andy.discordstuff.listener.TabCompletionListener;
 import me.comfortable_andy.discordstuff.markdown.Markdown;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownBold;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownItalic;
