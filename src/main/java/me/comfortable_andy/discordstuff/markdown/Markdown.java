@@ -18,7 +18,7 @@ public abstract class Markdown implements Comparable<Markdown> {
     protected final ChatColor color;
     protected final String[] characters;
     protected final int orderIndex;
-    protected boolean mustHaveSpaceAfter = false;
+    protected boolean shouldTouchSpaceAndText = false;
 
     public Markdown(String name, ChatColor color, int orderIndex, String... characters) {
         this.name = name;
