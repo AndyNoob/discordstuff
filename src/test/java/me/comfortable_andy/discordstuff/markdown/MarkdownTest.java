@@ -60,6 +60,16 @@ public class MarkdownTest {
         expected = ChatColor.BOLD + "sup " + ChatColor.RED + "you suck" + ChatColor.RESET + ChatColor.RED + " boi";
 
         assertEquals(expected, new FancyParser().parse(input));
+
+        input = "_**hi Comfortable_Andy hi**_";
+        expected = ChatColor.ITALIC + "" + ChatColor.BOLD + "hi Comfortable_Andy hi" + ChatColor.RESET + "" + ChatColor.ITALIC + "" + ChatColor.RESET;
+
+        assertEquals(expected, new FancyParser().parse(input));
+
+        input = "**_hi Comfortable_Andy hi_**";
+        expected = ChatColor.BOLD + "" + ChatColor.ITALIC + "hi Comfortable_Andy hi" + ChatColor.RESET + "" + ChatColor.BOLD + "" + ChatColor.RESET;
+
+        assertEquals(expected, new FancyParser().parse(input));
     }
 
     @Test
@@ -74,13 +84,18 @@ public class MarkdownTest {
 
         assertEquals(expected, new DiscordParser().parse(input));
 
-        input = "This is a **te~~st** of~~ *markdown* and ~~it's~~ __working__!";
-        expected = "This is a " + ChatColor.BOLD + "te~~st" + ChatColor.RESET + " of" + ChatColor.STRIKETHROUGH + " " + ChatColor.ITALIC + "markdown" + ChatColor.RESET + ChatColor.STRIKETHROUGH + " and " + ChatColor.RESET + "it's~~ " + ChatColor.UNDERLINE + "working" + ChatColor.RESET + "!";
+        input = "This is a **te~~st** of ~~ *markdown* and ~~ it's~~ __working__!";
+        expected = "This is a " + ChatColor.BOLD + "te~~st" + ChatColor.RESET + " of " + ChatColor.STRIKETHROUGH + " " + ChatColor.ITALIC + "markdown" + ChatColor.RESET + ChatColor.STRIKETHROUGH + " and " + ChatColor.RESET + " it's~~ " + ChatColor.UNDERLINE + "working" + ChatColor.RESET + "!";
 
         assertEquals(expected, new DiscordParser().parse(input));
 
         input = "**sup " + ChatColor.RED + "you suck** boi";
         expected = ChatColor.BOLD + "sup " + ChatColor.RED + "you suck" + ChatColor.RESET + ChatColor.RED + " boi";
+
+        assertEquals(expected, new DiscordParser().parse(input));
+
+        input = "**_hi Comfortable_Andy hi_**";
+        expected = ChatColor.BOLD + "" + ChatColor.ITALIC + "hi Comfortable_Andy hi" + ChatColor.RESET + "" + ChatColor.BOLD + "" + ChatColor.RESET;
 
         assertEquals(expected, new DiscordParser().parse(input));
     }
