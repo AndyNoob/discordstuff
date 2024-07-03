@@ -35,9 +35,15 @@ public class ChatListener implements Listener {
         for (Player player : event.getRecipients()) {
             final Pattern pattern = Pattern.compile("@?" + player.getName());
             final Matcher matcher = pattern.matcher(converted);
-            if (matcher.find()) {
-                converted = matcher.replaceAll(replacement);
+            boolean matched = false;
+            while (matcher.find()) {
+                matched = true;
+                final String lastCol = ChatColor.getLastColors(converted.substring(0, matcher.start()));
+                converted = matcher.replaceFirst(replacement + ChatColor.RESET + lastCol);
+            }
+            if (matched) {
                 final String sound = config.getString("ping.sound.name", "minecraft:entity.arrow.hit_player");
+
                 if (!sound.isEmpty())
                     player.playSound(
                             player.getEyeLocation(),
