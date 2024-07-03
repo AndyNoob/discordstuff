@@ -1,3 +1,11 @@
+# v2.6.0
+```diff
++ @-ping chat completion (1.20+)
++ @-ping chat 
++ Parsers now respect _ and * needing to touch space and text
+~ Rewrote discord parser to always match the furthest away triggers
+```
+
 # v2.5.1
 ```diff
 - Removed test completion listener
