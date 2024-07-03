@@ -7,9 +7,10 @@ import org.bukkit.ChatColor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static me.comfortable_andy.discordstuff.markdown.Markdown.concatenate;
 
 /*
  * a.k.a. the discord way
@@ -27,60 +28,60 @@ public class DiscordParser extends MarkdownParser {
     }
 
     public String parse0(String input, boolean keep, List<ChatColor> currentColors) {
-        final StringBuilder builder = new StringBuilder();
-        final Matcher matcher = getPattern().matcher(input);
+        if (input.isEmpty()) return input;
+        final StringBuilder out = new StringBuilder();
+        for (int i = 0; i < input.length(); ) {
+            final String left = input.substring(i);
+            Markdown markdown = null;
+            String trigger = null;
 
-        String left = input;
+            for (Markdown md : Markdown.getOrderedMarkdowns()) {
+                if (markdown != null) break;
+                for (String t : md.getCharacters()) {
+                    if (!left.startsWith(t)) continue;
+                    markdown = md;
+                    trigger = t;
+                    break;
+                }
+            }
 
-        while (matcher.find()) {
-            final int trueStart = matcher.start();
-            final int contentStart = matcher.start(2);
-            final int contentEnd = matcher.end(2);
-            final int trueEnd = matcher.end();
-            final ChatColor color = findColor(matcher.group(1));
-            currentColors.addAll(convertFromStr(ChatColor.getLastColors(left.substring(0, trueEnd))));
-            final List<ChatColor> colors = new ArrayList<>(currentColors);
-            colors.add(color);
-            builder
-                    .append(left, 0, trueStart)
-                    .append(color)
-                    .append(left, trueStart, keep ? contentStart : trueStart)
-                    .append(this.parse0(matcher.group(2), keep, colors))
-                    .append(left, keep ? contentEnd : 0, keep ? trueEnd : 0)
-                    .append(ChatColor.RESET)
-                    .append(currentColors.stream().map(ChatColor::toString).collect(Collectors.joining()));
-            left = left.substring(trueEnd);
-            matcher.reset(left);
+            if (markdown == null || (markdown.isShouldTouchSpaceAndText() && !Markdown.spaceAndText(input, i, trigger.length()))) {
+                out.append(input, i, i + 1);
+                i++;
+                continue;
+            }
+            // find match and increase i
+            final int triggerLen = trigger.length();
+            final int contentStart = i + triggerLen;
+
+            int lastFound = -1;
+
+            for (int j = input.length() - triggerLen; j > i + 1; j--) {
+                if (!input.startsWith(trigger, j)) continue;
+                if (markdown.isShouldTouchSpaceAndText() && !Markdown.spaceAndText(input, j, triggerLen)) {
+                    continue;
+                }
+                lastFound = j;
+            }
+            if (lastFound == -1) {
+                out.append(input, i, i + 1);
+                i++;
+                continue;
+            }
+            currentColors.addAll(convertFromStr(ChatColor.getLastColors(input.substring(0, lastFound))));
+            List<ChatColor> colors = new ArrayList<>(currentColors);
+            colors.add(markdown.getColor());
+            out.append(markdown.getColor());
+            if (keep) out.append(trigger);
+            out.append(parse0(input.substring(contentStart, lastFound), keep, colors));
+            if (keep) out.append(trigger);
+            out.append(ChatColor.RESET);
+            out.append(currentColors.stream()
+                    .map(ChatColor::toString)
+                    .collect(Collectors.joining()));
+            i = lastFound + triggerLen;
         }
-
-        builder.append(left);
-
-        return builder.toString();
-    }
-
-    private ChatColor findColor(String trigger) {
-        return Arrays.stream(Markdown.getOrderedMarkdowns())
-                .filter(markdown -> Arrays.asList(markdown.getCharacters()).contains(trigger))
-                .findFirst()
-                .orElseThrow(IllegalStateException::new)
-                .getColor();
-    }
-
-    private Pattern getPattern() {
-        final Markdown[] markdowns = Markdown.getOrderedMarkdowns();
-        final String all = concatenate(markdowns);
-        final String specials = concatenate(Arrays.stream(markdowns).filter(Markdown::isMustHaveSpaceAfter).toArray(Markdown[]::new));
-
-        return Pattern.compile(String.format("(%s)((?<=%s)\\S.+?|(?<!%s).+?)(\\1)", all, specials, specials));
-    }
-
-    private String concatenate(Markdown[] markdowns) {
-        return Arrays.stream(markdowns)
-                .reduce(
-                        "",
-                        (s, markdown) -> s + (s.isEmpty() ? "" : "|") + Arrays.stream(markdown.getCharacters()).map(StringUtil::regexEscape).collect(Collectors.joining("|")),
-                        (s1, s2) -> s1 + "|" + s2
-                );
+        return out.toString();
     }
 
 }

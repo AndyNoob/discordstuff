@@ -2,7 +2,6 @@ package me.comfortable_andy.discordstuff.markdown.parser;
 
 import me.comfortable_andy.discordstuff.markdown.Markdown;
 import me.comfortable_andy.discordstuff.util.MarkdownRegion;
-import me.comfortable_andy.discordstuff.util.StringUtil;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -25,13 +24,22 @@ public class FancyParser extends MarkdownParser {
             for (Markdown markdown : markdowns) {
                 for (String trigger : markdown.getCharacters()) {
                     if (!left.startsWith(trigger)) continue;
-                    final MarkdownRegion matched = incomplete.stream().filter(region -> region.getMarkdown() == markdown && region.getContent().equals(trigger)).findFirst().orElse(null);
+                    if (markdown.isShouldTouchSpaceAndText()
+                            && !Markdown.spaceAndText(input, i, trigger.length())
+                    ) {
+                        continue;
+                    }
+
+                    final MarkdownRegion matched = incomplete
+                            .stream()
+                            .filter(region -> region.getMarkdown() == markdown
+                                    && region.getContent().equals(trigger))
+                            .findFirst()
+                            .orElse(null);
 
                     if (matched == null) {
-                        if (StringUtil.charAt(input, i + trigger.length()).matches("\\s")) continue;
                         incomplete.add(new MarkdownRegion(markdown, trigger, i));
                     } else {
-                        if (StringUtil.charAt(input, i - 1).matches("\\s")) continue;
                         matched.setCompleted(true);
                         // current index is on the first character of the trigger
                         // so moving it forward by the length of the trigger will
@@ -80,4 +88,5 @@ public class FancyParser extends MarkdownParser {
 
         return builder.toString();
     }
+
 }
