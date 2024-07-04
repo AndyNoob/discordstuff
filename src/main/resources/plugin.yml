@@ -23,6 +23,9 @@ permissions:
   discordstuff.commands.plugin.parser:
     description: Allows the user to modify the markdown parser
     default: op
+  discordstuff.ping.use:
+    description: Allows pinging other players
+    default: true
 
 commands:
   discordstuff:

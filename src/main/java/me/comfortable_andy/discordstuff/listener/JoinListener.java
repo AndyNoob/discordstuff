@@ -32,6 +32,7 @@ public class JoinListener implements Listener {
         if (SET_COMPLETION == null) return;
         final List<String> pings = Bukkit.getOnlinePlayers().stream().map(p -> "@" + p.getName()).collect(Collectors.toList());
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.hasPermission("discordstuff.ping.use")) continue;
             try {
                 SET_COMPLETION.invoke(player, pings);
             } catch (ReflectiveOperationException ignored) {
