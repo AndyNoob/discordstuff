@@ -1,3 +1,9 @@
+# v2.6.1
+```diff
++ New permission for pinging
++ "ping.enabled" config option
+```
+
 # v2.6.0
 ```diff
 + @-ping chat completion (1.20+)
@@ -5,6 +11,7 @@
 + Parsers now respect _ and * needing to touch space and text
 ~ Rewrote discord parser to always match the furthest away triggers
 ```
+
 
 # v2.5.1
 ```diff
