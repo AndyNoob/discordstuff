@@ -1,11 +1,13 @@
 package me.comfortable_andy.discordstuff;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
 import me.comfortable_andy.discordstuff.commands.discord.AppendingCommand;
 import me.comfortable_andy.discordstuff.commands.discord.CommandShrug;
 import me.comfortable_andy.discordstuff.commands.discord.CommandTableflip;
 import me.comfortable_andy.discordstuff.commands.discord.CommandUnflip;
 import me.comfortable_andy.discordstuff.commands.plugin.PluginCommand;
-import me.comfortable_andy.discordstuff.listener.ChatListener;
+import me.comfortable_andy.discordstuff.listener.PaperChatListener;
+import me.comfortable_andy.discordstuff.listener.SpigotChatListener;
 import me.comfortable_andy.discordstuff.listener.JoinListener;
 import me.comfortable_andy.discordstuff.markdown.Markdown;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownBold;
@@ -54,7 +56,13 @@ public final class Main extends JavaPlugin {
     }
 
     private void registerListeners() {
-        getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        try {
+            getLogger().info("Located " + AsyncChatEvent.class.getName() + ", registering paper chat listener.");
+            getServer().getPluginManager().registerEvents(new PaperChatListener(), this);
+        } catch (Exception e) {
+            getLogger().info("Registering spigot chat listener.");
+            getServer().getPluginManager().registerEvents(new SpigotChatListener(), this);
+        }
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
     }
 
