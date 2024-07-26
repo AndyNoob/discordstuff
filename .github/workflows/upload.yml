@@ -100,6 +100,6 @@ jobs:
           changelog: ${{ needs.check-commit.outputs.changelog }}
       - name: "Summary"
         run: |
-          echo '[Modrinth URL](${{ steps.mc-publish.modrinth-url }})' >> $GITHUB_STEP_SUMMARY
-          echo '[Curseforge URL](${{ steps.mc-publish.curseforge-url }})' >> $GITHUB_STEP_SUMMARY
-          echo "[Github URL](${{ steps.mc-publish.github-url }})" >> $GITHUB_STEP_SUMMARY
+          echo '[Modrinth URL](${{ steps.mc-publish.outputs.modrinth-url }})' >> $GITHUB_STEP_SUMMARY
+          echo '[Curseforge URL](${{ steps.mc-publish.outputs.curseforge-url }})' >> $GITHUB_STEP_SUMMARY
+          echo "[Github URL](${{ steps.mc-publish.outputs.github-url }})" >> $GITHUB_STEP_SUMMARY
