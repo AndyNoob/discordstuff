@@ -1,3 +1,8 @@
+# v2.7.0
+```diff
++ Paper chat event adaptation
+```
+
 # v2.6.1
 ```diff
 + New permission for pinging
