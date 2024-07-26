@@ -67,6 +67,12 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.check-commit.outputs.new_ver != '' }}
     steps:
+      - name: "Downloading built jar"
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.check-commit.outputs.new_ver }}
+      - name: "Display structure of downloaded files"
+        run: ls -R
       - name: "MCPublish"
         uses: Kir-Antipov/mc-publish@v3.3
         with:
@@ -84,7 +90,6 @@ jobs:
           version: ${{ needs.check-commit.outputs.new_ver }}
 
           files: |
-            !**/original-*.jar
             **/*.jar
 
           changelog: ${{ needs.check-commit.outputs.changelog }}
