@@ -84,7 +84,7 @@ jobs:
           version: ${{ needs.check-commit.outputs.new_ver }}
 
           files: |
-            **/*.jar
             !**/original-*.jar
+            **/*.jar
 
           changelog: ${{ needs.check-commit.outputs.changelog }}
