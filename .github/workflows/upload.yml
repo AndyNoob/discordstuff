@@ -32,8 +32,6 @@ jobs:
           pattern: ${{ steps.match.outputs.group1 }}
       - name: "Summary"
         run: |
-          echo '# Version' >> $GITHUB_STEP_SUMMARY
-          echo '## Changelog' >> $GITHUB_STEP_SUMMARY
           echo '${{ steps.extract-changelog.outputs.markdown }}' >> $GITHUB_STEP_SUMMARY
     outputs:
       new_ver: ${{ steps.match.outputs.group1 }}
