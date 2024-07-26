@@ -1,6 +1,5 @@
 package me.comfortable_andy.discordstuff.listener;
 
-import me.comfortable_andy.discordstuff.markdown.Markdown;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
