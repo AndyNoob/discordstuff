@@ -3,7 +3,7 @@ name: Build and Uploading
 on:
   push:
     branches:
-    - main
+      - main
 
 jobs:
   check-commit:
@@ -63,96 +63,30 @@ jobs:
           path: |
             **/*.jar
             !**/original-*.jar
-  release:
+  publish:
     needs:
-      - check-commit
       - build
     runs-on: ubuntu-latest
     if: ${{ needs.check-commit.outputs.new_ver != '' }}
     steps:
-      - uses: mukunku/tag-exists-action@v1.4.0
-        id: check_exists
+      - name: "MCPublish"
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
-          tag: v${{ needs.check-commit.outputs.new_ver }}
-      - name: "Exit if release exists"
-        run: exit 1
-        if: steps.check_exists.outputs.exists == 'true'
-      - name: "Downloading built jar"
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ needs.check-commit.outputs.new_ver }}
-      - name: "Display structure of downloaded files"
-        run: ls -R
-      - name: "Create Release"
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-          tag_name: v${{ needs.check-commit.outputs.new_ver }}
-          name: Release v${{ needs.check-commit.outputs.new_ver }}
-          body: ${{ needs.check-commit.outputs.changelog }}
-          draft: false
-          prerelease: false
-          files: './target/*.jar'
-          fail_on_unmatched_files: true
-      - name: "Summary"
-        run: |
-          echo '## GitHub Release' >> $GITHUB_STEP_SUMMARY
-          echo 'Release can be found at ${{ steps.create_release.outputs.url }}'
-  upload-curseforge:
-    needs:
-      - check-commit
-      - build
-    runs-on: ubuntu-latest
-    if: ${{ needs.check-commit.outputs.new_ver != '' }}
-    steps:
-      - name: "Downloading built jar"
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ needs.check-commit.outputs.new_ver }}
-      - name: "Display structure of downloaded files"
-        run: ls -R
-      - id: find_jar
-        run: JAR_LOC="$(find * -name '*.jar')" && echo "jar_loc=$JAR_LOC" >> $GITHUB_OUTPUT
-      - name: "Upload to CurseForge"
-        uses: itsmeow/curseforge-upload@3.1.1
-        with:
-          token: ${{ secrets.CURSEFORGE_TOKEN }}
-          project_id: 933999
-          game_endpoint: "minecraft"
-          file_path: ${{ steps.find_jar.outputs.jar_loc }}
-          changelog: ${{ needs.check-commit.outputs.changelog }}
-          game_versions: 1.16.5,1.17,1.18,1.18.1,1.18.2,1.19,1.19.1,1.19.2,1.19.3,1.19.4,1.20,1.20.1,1.20.2
-  upload-modrinth:
-    needs:
-      - check-commit
-      - build
-    runs-on: ubuntu-latest
-    if: ${{ needs.check-commit.outputs.new_ver != '' }}
-    steps:
-      - name: "Downloading built jar"
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ needs.check-commit.outputs.new_ver }}
-      - name: "Display structure of downloaded files"
-        run: ls -R
-      - id: find_jar
-        run: JAR_LOC="$(find * -name '*.jar')" && echo "jar_loc=$JAR_LOC" >> $GITHUB_OUTPUT
-      - name: "Upload to Modrinth"
-        uses: RubixDev/modrinth-upload@v1
-        id: upload
-        with:
-          token: ${{ secrets.MODRINTH_TOKEN }}
-          file_path: ${{ steps.find_jar.outputs.jar_loc }}
-          name: v${{ needs.check-commit.outputs.new_ver }}
+          modrinth-id: XOp04Yi2
+          modrinth-featured: true
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          curseforge-id: 933999
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-tag: v${{ needs.check-commit.outputs.new_ver }}
+
+          game-versions: ">=1.16.5"
           version: ${{ needs.check-commit.outputs.new_ver }}
+
+          files: |
+            **/*.jar
+            !**/original-*.jar
+
           changelog: ${{ needs.check-commit.outputs.changelog }}
-          game_versions: 1.16,1.16.1,1.16.2,1.16.3,1.16.4,1.16.5,1.17,1.17.1,1.18,1.18.1,1.18.2,1.19,1.19.1,1.19.2,1.19.3,1.19.4,1.20,1.20.1,1.20.2
-          release_type: release
-          loaders: bukkit,spigot,paper
-          featured: true
-          project_id: XOp04Yi2
-      - name: "Summary"
-        run: |
-          echo '## Modrinth Release' >> $GITHUB_STEP_SUMMARY
-          echo 'Release can be found at https://modrinth.com/plugin/${{ steps.upload.with.project_id }}/version/${{ steps.upload.outputs.id }}' >> $GITHUB_STEP_SUMMARY
