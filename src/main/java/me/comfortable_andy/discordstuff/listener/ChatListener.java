@@ -1,6 +1,7 @@
 package me.comfortable_andy.discordstuff.listener;
 
 import me.comfortable_andy.discordstuff.Main;
+import me.comfortable_andy.discordstuff.markdown.Markdown;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.ChatColor;
@@ -18,7 +19,8 @@ import java.util.regex.Pattern;
 
 public abstract class ChatListener {
 
-    protected String execute(Player player, Set<? extends HumanEntity> recipients, String converted) {
+    protected String execute(Player player, Set<? extends HumanEntity> recipients, String str) {
+        str = Markdown.convert(str);
         final FileConfiguration config = Main.getInstance().getConfig();
 
         if (player.hasPermission("discordstuff.ping.use")
@@ -31,16 +33,16 @@ public abstract class ChatListener {
             final String replacement = list
                     .stream()
                     .map(ChatColor::valueOf)
-                    .reduce("", (str, col) -> str + col, (a, b) -> a + b) + "$0";
+                    .reduce("", (st, col) -> st + col, (a, b) -> a + b) + "$0";
 
             for (HumanEntity recipient : recipients) {
                 final Pattern pattern = Pattern.compile("@?" + recipient.getName());
-                final Matcher matcher = pattern.matcher(converted);
+                final Matcher matcher = pattern.matcher(str);
                 boolean matched = false;
                 while (matcher.find()) {
                     matched = true;
-                    final String lastCol = ChatColor.getLastColors(converted.substring(0, matcher.start()));
-                    converted = matcher.replaceFirst(replacement + ChatColor.RESET + lastCol);
+                    final String lastCol = ChatColor.getLastColors(str.substring(0, matcher.start()));
+                    str = matcher.replaceFirst(replacement + ChatColor.RESET + lastCol);
                 }
                 if (matched) {
                     @Subst("minecraft:entity.arrow.hit_player") final String sound = config.getString("ping.sound.name", "minecraft:entity.arrow.hit_player");
@@ -70,7 +72,7 @@ public abstract class ChatListener {
                 }
             }
         }
-        return converted;
+        return str;
     }
 
 }

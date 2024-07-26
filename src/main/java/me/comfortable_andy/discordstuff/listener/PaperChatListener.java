@@ -15,14 +15,13 @@ public class PaperChatListener extends ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(AsyncChatEvent event) {
-        event.message(
-                SERIALIZER.deserialize(execute(
-                        event.getPlayer(),
-                        event.viewers().stream()
-                                .filter(a -> a instanceof HumanEntity)
-                                .map(a -> (HumanEntity) a).collect(Collectors.toSet()),
-                        SERIALIZER.serialize(event.message())
-                ))
+        final String newMessage = execute(
+                event.getPlayer(),
+                event.viewers().stream()
+                        .filter(a -> a instanceof HumanEntity)
+                        .map(a -> (HumanEntity) a).collect(Collectors.toSet()),
+                SERIALIZER.serialize(event.message())
         );
+        event.message(SERIALIZER.deserialize(newMessage));
     }
 }

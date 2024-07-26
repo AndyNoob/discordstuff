@@ -11,9 +11,8 @@ public class SpigotChatListener extends ChatListener implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(AsyncPlayerChatEvent event) {
-        String converted = Markdown.convert(event.getMessage());
-        converted = execute(event.getPlayer(), event.getRecipients(), converted);
-        event.setMessage(converted);
+        final String newMsg = execute(event.getPlayer(), event.getRecipients(), event.getMessage());
+        event.setMessage(newMsg);
     }
 
 }
