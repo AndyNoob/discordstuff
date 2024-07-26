@@ -74,6 +74,7 @@ jobs:
       - name: "Display structure of downloaded files"
         run: ls -R
       - name: "MCPublish"
+        id: mc-publish
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: XOp04Yi2
@@ -88,8 +89,16 @@ jobs:
 
           game-versions: ">=1.16.5"
           version: ${{ needs.check-commit.outputs.new_ver }}
+          loaders: |
+            spigot
+            paper
 
           files: |
             **/*.jar
 
           changelog: ${{ needs.check-commit.outputs.changelog }}
+      - name: "Summary"
+        run: |
+          echo '[Modrinth URL](${{ steps.mc-publish.modrinth-url }})' >> $GITHUB_STEP_SUMMARY
+          echo '[Curseforge URL](${{ steps.mc-publish.curseforge-url }})' >> $GITHUB_STEP_SUMMARY
+          echo "[Github URL](${{ steps.mc-publish.github-url }})" >> $GITHUB_STEP_SUMMARY
