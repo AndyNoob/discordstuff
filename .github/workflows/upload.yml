@@ -63,6 +63,7 @@ jobs:
             !**/original-*.jar
   publish:
     needs:
+      - check-commit
       - build
     runs-on: ubuntu-latest
     if: ${{ needs.check-commit.outputs.new_ver != '' }}
