@@ -2,6 +2,7 @@ package me.comfortable_andy.discordstuff.listener;
 
 import me.comfortable_andy.discordstuff.DiscordStuffMain;
 import me.comfortable_andy.discordstuff.markdown.Markdown;
+import me.comfortable_andy.discordstuff.util.EmojiUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.ChatColor;
@@ -12,10 +13,11 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.intellij.lang.annotations.Subst;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public abstract class ChatListener {
 
@@ -73,6 +75,27 @@ public abstract class ChatListener {
                 }
             }
         }
+
+        if (player.hasPermission("discordstuff.emoji.use")
+                && config.getBoolean("emoji.enabled", true)) {
+            AtomicReference<String> strAtomic = new AtomicReference<>(str);
+            List<String> whitelist = config.getStringList("emoji.whitelist");
+            var set = EmojiUtil.getEmojis().entrySet()
+                    .stream()
+                    .parallel()
+                    .filter(e -> !config.getBoolean("emoji.colonOnly", false)
+                            || e.getKey().startsWith(":"))
+                    .filter(e -> whitelist.isEmpty() || whitelist.contains(e.getKey()))
+                    .filter(e -> strAtomic.get().contains(e.getKey()))
+                    .sorted(Comparator
+                            .comparing((Map.Entry<String, String> e) -> e.getKey().length())
+                            .reversed())
+                    .collect(Collectors.toList());
+            for (var entry : set) {
+                str = str.replace(entry.getKey(), entry.getValue());
+            }
+        }
+
         return str;
     }
 

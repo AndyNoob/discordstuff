@@ -29,6 +29,9 @@ permissions:
   discordstuff.ping.use:
     description: Allows pinging other players
     default: true
+  discordstuff.emoji.use:
+    description: Allows use of emojis in chat
+    default: true
 
 commands:
   discordstuff:

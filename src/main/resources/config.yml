@@ -27,3 +27,8 @@ ping:
     type: "MASTER" # any of https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/SoundCategory.html#enum-constant-summary
     volume: 1
     pitch: 1
+
+emoji:
+  enabled: true
+  whitelist: [] # leave empty to turn off, use primary names (see /ds emoji show)
+  colonOnly: false # set to true to stop replacement of text like "=D"
