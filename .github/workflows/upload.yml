@@ -103,7 +103,7 @@ jobs:
     if: ${{ (needs.check-commit.outputs.new_ver != '') && (vars.MODRINTH_ID != '') }}
     steps:
       - name: "Downloading built jar"
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ needs.check-commit.outputs.new_ver }}
       - name: "Display structure of downloaded files"
