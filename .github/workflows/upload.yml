@@ -46,15 +46,15 @@ jobs:
       - name: "Display version"
         run: echo 'Compiling for version ${{ needs.check-commit.outputs.new_ver }}'
       - name: "Checking out"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: "Set up java"
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          distribution: 'corretto' # See 'Supported distributions' for available options
-          java-version: '17'
-          cache: maven
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '21'
+          cache: gradle
       - name: "Build the jar"
-        run: mvn --batch-mode --update-snapshots verify
+        run: gradle build --no-daemon
       - name: "Upload artifact"
         uses: actions/upload-artifact@v4
         with:
