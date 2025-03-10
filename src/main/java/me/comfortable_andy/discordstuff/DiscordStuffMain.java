@@ -14,6 +14,7 @@ import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownBold;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownItalic;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownStrikethrough;
 import me.comfortable_andy.discordstuff.markdown.markdowns.MarkdownUnderline;
+import me.comfortable_andy.discordstuff.util.EmojiUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
@@ -32,6 +33,8 @@ public final class DiscordStuffMain extends JavaPlugin {
         INSTANCE = this;
 
         saveDefaultConfig();
+
+        EmojiUtil.loadEmojis(this);
 
         //noinspection DataFlowIssue
         getCommand("discordstuff").setExecutor(new PluginCommand());

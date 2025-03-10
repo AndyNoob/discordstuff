@@ -25,6 +25,7 @@ permissions:
     default: op
   discordstuff.commands.plugin.emoji:
     description: Allows the user to access emoji commands (re-download)
+    default: op
   discordstuff.ping.use:
     description: Allows pinging other players
     default: true
