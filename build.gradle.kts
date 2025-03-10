@@ -6,7 +6,7 @@ plugins {
     java
     `maven-publish`
     id("io.papermc.paperweight.userdev") version("2.0.0-beta.14")
-    id("xyz.jpenilla.run-paper") version("2.3.0")
+    id("xyz.jpenilla.run-paper") version("2.3.1")
 }
 
 repositories {
@@ -34,7 +34,6 @@ dependencies {
 group = "me.comfortable_andy"
 version = "2.7.0"
 description = "discord-stuff"
-//java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 publishing {
     publications.create<MavenPublication>("maven") {
@@ -42,11 +41,20 @@ publishing {
     }
 }
 
-tasks.withType<JavaCompile>() {
+tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.release.set(11)
 }
 
-tasks.withType<Javadoc>() {
+tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
+}
+
+tasks.withType<ProcessResources> {
+    val props = mapOf("version" to version)
+    inputs.properties(props)
+    filteringCharset = "UTF-8"
+    filesMatching("plugin.yml") {
+        expand(props)
+    }
 }
