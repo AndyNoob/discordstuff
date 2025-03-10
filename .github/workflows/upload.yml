@@ -56,7 +56,7 @@ jobs:
       - name: "Build the jar"
         run: mvn --batch-mode --update-snapshots verify
       - name: "Upload artifact"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ needs.check-commit.outputs.new_ver }}
           path: |
@@ -70,7 +70,7 @@ jobs:
     if: ${{ needs.check-commit.outputs.new_ver != '' }}
     steps:
       - name: "Downloading built jar"
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ needs.check-commit.outputs.new_ver }}
       - name: "Display structure of downloaded files"
