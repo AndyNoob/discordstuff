@@ -3,6 +3,7 @@
 + Emoji downloading from https://emzi0767.mzgit.io/discord-emoji/
 + Emoji subcommand
 + Emoji replacement, perms, config
+~ Plugin is now built for java 17
 ```
 ```yml
 # new config section!
