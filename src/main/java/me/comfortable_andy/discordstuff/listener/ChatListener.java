@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 public abstract class ChatListener {
 
+    @SuppressWarnings("deprecation")
     protected String execute(Player player, Set<? extends HumanEntity> recipients, String str) {
         str = Markdown.convert(str);
         final FileConfiguration config = DiscordStuffMain.getInstance().getConfig();

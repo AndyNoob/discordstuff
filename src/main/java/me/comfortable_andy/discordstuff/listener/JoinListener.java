@@ -18,7 +18,6 @@ public class JoinListener implements Listener {
     static {
         Method setCompletion;
         try {
-            //noinspection JavaReflectionMemberAccess
             setCompletion = Player.class.getDeclaredMethod("setCustomChatCompletions", Collection.class);
             DiscordStuffMain.getInstance().getLogger().info("@-ping tab completion is enabled.");
         } catch (NoSuchMethodException e) {

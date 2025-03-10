@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@SuppressWarnings({"deprecation", "BooleanMethodIsAlwaysInverted"})
 @Data
 public abstract class Markdown implements Comparable<Markdown> {
 

@@ -33,6 +33,7 @@ public final class DiscordStuffMain extends JavaPlugin {
 
         saveDefaultConfig();
 
+        //noinspection DataFlowIssue
         getCommand("discordstuff").setExecutor(new PluginCommand());
 
         makeInstance(this.markdowns);
@@ -45,6 +46,7 @@ public final class DiscordStuffMain extends JavaPlugin {
         // Plugin shutdown logic
     }
 
+    @SuppressWarnings("deprecation")
     private <T> void makeInstance(List<Class<? extends T>> classes) {
         for (Class<?> clazz : classes) {
             try {
