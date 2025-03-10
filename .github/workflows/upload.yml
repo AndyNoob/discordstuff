@@ -62,6 +62,7 @@ jobs:
           path: |
             **/*.jar
             !**/original-*.jar
+            !**/gradle-wrapper.jar
   publish-github:
     needs:
       - check-commit
