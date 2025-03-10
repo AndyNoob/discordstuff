@@ -54,7 +54,7 @@ jobs:
           java-version: '21'
           cache: gradle
       - name: "Build the jar"
-        run: gradle build --no-daemon
+        run: ./gradlew build --no-daemon
       - name: "Upload artifact"
         uses: actions/upload-artifact@v4
         with:
