@@ -5,22 +5,26 @@ import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"unused", "MismatchedQueryAndUpdateOfCollection"})
 public class EmojiUtil {
 
     public static final String EMOJI_FILE_NAME = "emojis.json5";
-    private static final Map<String, String> EMOJIS = new ConcurrentHashMap<>();
+    private static final Map<String, String> EMOJIS = Collections.synchronizedMap(new LinkedHashMap<>());
     private static final Gson GSON = new GsonBuilder().setLenient().disableHtmlEscaping().create();
     private static final URL DATA_URL;
 

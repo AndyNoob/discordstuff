@@ -5,6 +5,8 @@ import me.comfortable_andy.discordstuff.markdown.Markdown;
 import me.comfortable_andy.discordstuff.markdown.parser.MarkdownParser;
 import me.comfortable_andy.discordstuff.util.EmojiUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -56,19 +58,29 @@ public class PluginCommand implements TabExecutor {
             }
             if (matchArg(1, "show", args)) {
                 int perMsg = 100;
-                List<String> all = new ArrayList<>(new HashSet<>(EmojiUtil.getEmojis().values()));
-
-                var groups = all
-                        .stream()
-                        .filter(v -> v.length() <= 2)
-                        .collect(Collectors
-                                .groupingBy(v -> all.indexOf(v) * perMsg / all.size())
-                        );
-                for (var set : groups.entrySet()) {
-                    String msg = set.getKey() + ": " + String.join(" ", set.getValue());
-                    sender.sendMessage(Component.text(msg));
-                    DiscordStuffMain.getInstance().getLogger().info(msg);
+                var emojis = EmojiUtil.getEmojis();
+                int i = 0;
+                Map<Integer, List<TextComponent>> msgs = new LinkedHashMap<>();
+                for (var entry : emojis.entrySet()) {
+                    var list = msgs.computeIfAbsent(i * perMsg / emojis.size(), ArrayList::new);
+                    list.add(Component
+                            .text(entry.getValue())
+                            .hoverEvent(Component.text(entry.getKey()))
+                    );
+                    i++;
                 }
+                for (var entry : msgs.entrySet()) {
+                    TextComponent component = Component.text(entry.getKey())
+                            .append(Component.text(": "))
+                            .append(Component.join(JoinConfiguration.separator(Component.text(" ")), entry.getValue()));
+                    String raw = entry.getKey() + ": " + entry.getValue().stream().map(TextComponent::content).collect(Collectors.joining(" "));
+                    if (DiscordStuffMain.getInstance().isPaper())
+                        sender.sendMessage(component);
+                    else sender.sendMessage(raw);
+                    DiscordStuffMain.getInstance().getLogger().info(raw);
+                }
+                if (DiscordStuffMain.getInstance().isPaper())
+                    sender.sendMessage(Markdown.convert("_hover to see primary names!_"));
             }
         }
         return true;

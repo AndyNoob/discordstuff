@@ -1,6 +1,7 @@
 package me.comfortable_andy.discordstuff;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import lombok.Getter;
 import me.comfortable_andy.discordstuff.commands.discord.AppendingCommand;
 import me.comfortable_andy.discordstuff.commands.discord.CommandShrug;
 import me.comfortable_andy.discordstuff.commands.discord.CommandTableflip;
@@ -27,6 +28,8 @@ public final class DiscordStuffMain extends JavaPlugin {
     private final List<Class<? extends AppendingCommand>> commands = Arrays.asList(CommandShrug.class, CommandTableflip.class, CommandUnflip.class);
     private final List<Class<? extends Markdown>> markdowns = Arrays.asList(MarkdownBold.class,
             MarkdownItalic.class, MarkdownUnderline.class, MarkdownStrikethrough.class);
+    @Getter
+    private boolean paper;
 
     @Override
     public void onEnable() {
@@ -64,6 +67,7 @@ public final class DiscordStuffMain extends JavaPlugin {
         try {
             getLogger().info("Located " + AsyncChatEvent.class.getName() + ", registering paper chat listener.");
             getServer().getPluginManager().registerEvents(new PaperChatListener(), this);
+            paper = true;
         } catch (Exception e) {
             getLogger().info("Registering spigot chat listener.");
             getServer().getPluginManager().registerEvents(new SpigotChatListener(), this);
