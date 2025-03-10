@@ -100,7 +100,7 @@ jobs:
       - check-commit
       - build
     runs-on: ubuntu-latest
-    if: ${{ (needs.check-commit.outputs.new_ver != '') && (MODRINTH_ID != '') }}
+    if: ${{ (needs.check-commit.outputs.new_ver != '') && (vars.MODRINTH_ID != '') }}
     steps:
       - name: "Downloading built jar"
         uses: actions/download-artifact@v3
@@ -112,7 +112,7 @@ jobs:
         id: mc-publish
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          modrinth-id: $MODRINTH_ID
+          modrinth-id: ${{ vars.MODRINTH_ID }}
           modrinth-featured: true
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
@@ -134,7 +134,7 @@ jobs:
       - check-commit
       - build
     runs-on: ubuntu-latest
-    if: ${{ (needs.check-commit.outputs.new_ver != '') && (CURSEFORGE_ID != '') }}
+    if: ${{ (needs.check-commit.outputs.new_ver != '') && (vars.CURSEFORGE_ID != '') }}
     steps:
       - name: "Downloading built jar"
         uses: actions/download-artifact@v3
@@ -146,7 +146,7 @@ jobs:
         id: mc-publish
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          curseforge-id: $CURSEFORGE_ID
+          curseforge-id: ${{ vars.CURSEFORGE_ID }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
           game-versions: ">=1.16.5"
