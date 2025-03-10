@@ -1,3 +1,17 @@
+# v2.7.1
+```diff
++ Emoji downloading from https://emzi0767.mzgit.io/discord-emoji/
++ Emoji subcommand
++ Emoji replacement, perms, config
+```
+```yml
+# new config section!
+emoji:
+  enabled: true
+  whitelist: [] # leave empty to turn off, use primary names (see /ds emoji show)
+  colonOnly: false # set to true to stop replacement of text like "=D"
+```
+
 # v2.7.0
 ```diff
 + Paper chat event adaptation
