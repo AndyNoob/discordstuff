@@ -1,6 +1,6 @@
 package me.comfortable_andy.discordstuff.listener;
 
-import me.comfortable_andy.discordstuff.Main;
+import me.comfortable_andy.discordstuff.DiscordStuffMain;
 import me.comfortable_andy.discordstuff.markdown.Markdown;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -21,7 +21,7 @@ public abstract class ChatListener {
 
     protected String execute(Player player, Set<? extends HumanEntity> recipients, String str) {
         str = Markdown.convert(str);
-        final FileConfiguration config = Main.getInstance().getConfig();
+        final FileConfiguration config = DiscordStuffMain.getInstance().getConfig();
 
         if (player.hasPermission("discordstuff.ping.use")
                 && config.getBoolean("ping.enabled", true)) {

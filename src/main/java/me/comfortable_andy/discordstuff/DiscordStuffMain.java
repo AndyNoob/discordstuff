@@ -19,9 +19,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Arrays;
 import java.util.List;
 
-public final class Main extends JavaPlugin {
+public final class DiscordStuffMain extends JavaPlugin {
 
-    private static Main INSTANCE;
+    private static DiscordStuffMain INSTANCE;
 
     private final List<Class<? extends AppendingCommand>> commands = Arrays.asList(CommandShrug.class, CommandTableflip.class, CommandUnflip.class);
     private final List<Class<? extends Markdown>> markdowns = Arrays.asList(MarkdownBold.class,
@@ -66,7 +66,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
     }
 
-    public static Main getInstance() {
+    public static DiscordStuffMain getInstance() {
         return INSTANCE;
     }
 }

@@ -1,6 +1,6 @@
 package me.comfortable_andy.discordstuff.listener;
 
-import me.comfortable_andy.discordstuff.Main;
+import me.comfortable_andy.discordstuff.DiscordStuffMain;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +20,7 @@ public class JoinListener implements Listener {
         try {
             //noinspection JavaReflectionMemberAccess
             setCompletion = Player.class.getDeclaredMethod("setCustomChatCompletions", Collection.class);
-            Main.getInstance().getLogger().info("@-ping tab completion is enabled.");
+            DiscordStuffMain.getInstance().getLogger().info("@-ping tab completion is enabled.");
         } catch (NoSuchMethodException e) {
             setCompletion = null;
         }

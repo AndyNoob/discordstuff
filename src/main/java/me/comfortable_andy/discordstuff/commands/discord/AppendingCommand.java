@@ -1,6 +1,6 @@
 package me.comfortable_andy.discordstuff.commands.discord;
 
-import me.comfortable_andy.discordstuff.Main;
+import me.comfortable_andy.discordstuff.DiscordStuffMain;
 import me.comfortable_andy.discordstuff.markdown.Markdown;
 import me.comfortable_andy.discordstuff.util.ReflectionUtil;
 import org.bukkit.Bukkit;
@@ -22,7 +22,7 @@ public abstract class AppendingCommand extends BukkitCommand {
         try {
             commandMap = ReflectionUtil.getField(Bukkit.getServer(), "commandMap");
         } catch (ReflectiveOperationException e) {
-            Main.getInstance().getLogger().log(Level.SEVERE, "Could not retrieve the command map!", e);
+            DiscordStuffMain.getInstance().getLogger().log(Level.SEVERE, "Could not retrieve the command map!", e);
         }
     }
 
@@ -34,18 +34,18 @@ public abstract class AppendingCommand extends BukkitCommand {
     protected AppendingCommand(String name, String message) {
         super(name);
 
-        commandMap.register(Main.getInstance().getName().toLowerCase(), this);
+        commandMap.register(DiscordStuffMain.getInstance().getName().toLowerCase(), this);
 
         this.message = message;
 
-        Main.getInstance().getServer().getPluginManager().addPermission(
-                this.permission = new Permission(Main.getInstance().getName() + ".commands." + name, PermissionDefault.TRUE)
+        DiscordStuffMain.getInstance().getServer().getPluginManager().addPermission(
+                this.permission = new Permission(DiscordStuffMain.getInstance().getName() + ".commands." + name, PermissionDefault.TRUE)
         );
-        this.permission.addParent(Main.getInstance().getServer().getPluginManager().getPermission("discordstuff.commands.*"), true);
+        this.permission.addParent(DiscordStuffMain.getInstance().getServer().getPluginManager().getPermission("discordstuff.commands.*"), true);
     }
 
     public boolean isEnabled() {
-        return Main.getInstance().getConfig().getBoolean("commands." + getName() + ".enabled", true);
+        return DiscordStuffMain.getInstance().getConfig().getBoolean("commands." + getName() + ".enabled", true);
     }
 
     @Override

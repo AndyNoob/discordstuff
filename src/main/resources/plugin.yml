@@ -1,6 +1,6 @@
 name: DiscordStuff
 version: '${project.version}'
-main: me.comfortable_andy.discordstuff.Main
+main: me.comfortable_andy.discordstuff.DiscordStuffMain
 api-version: 1.16
 authors: [ Comfortable_Andy ]
 permissions:

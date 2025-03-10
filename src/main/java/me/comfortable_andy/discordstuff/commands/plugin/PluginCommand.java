@@ -1,6 +1,6 @@
 package me.comfortable_andy.discordstuff.commands.plugin;
 
-import me.comfortable_andy.discordstuff.Main;
+import me.comfortable_andy.discordstuff.DiscordStuffMain;
 import me.comfortable_andy.discordstuff.markdown.Markdown;
 import me.comfortable_andy.discordstuff.markdown.parser.MarkdownParser;
 import org.bukkit.ChatColor;
@@ -8,18 +8,19 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@SuppressWarnings({"CodeBlock2Expr", "SameParameterValue"})
+@SuppressWarnings({"CodeBlock2Expr", "SameParameterValue", "deprecation"})
 public class PluginCommand implements TabExecutor {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
         runIf(permCheck(sender, "reload") && matchArg(0, "reload", args), () -> {
-            Main.getInstance().reloadConfig();
+            DiscordStuffMain.getInstance().reloadConfig();
             sender.sendMessage(Markdown.convert("__Re__**loaded**!"));
         });
         runIf(permCheck(sender, "test") && matchArg(0, "test", args), () -> {
@@ -38,8 +39,8 @@ public class PluginCommand implements TabExecutor {
             if (type == null) {
                 sender.sendMessage(ChatColor.BOLD + "Unknown parser: " + ChatColor.RED + parser);
             } else {
-                Main.getInstance().getConfig().set("parser", type.name());
-                Main.getInstance().saveConfig();
+                DiscordStuffMain.getInstance().getConfig().set("parser", type.name());
+                DiscordStuffMain.getInstance().saveConfig();
                 sender.sendMessage(ChatColor.BOLD + "Set parser to: " + ChatColor.GREEN + type.name().toLowerCase());
             }
         });
@@ -47,7 +48,7 @@ public class PluginCommand implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
         final List<String> result = new ArrayList<>();
         runIf(strings.length == 1, () -> {
             runIf(permCheck(commandSender, "reload"), () -> {

@@ -1,7 +1,7 @@
 package me.comfortable_andy.discordstuff.markdown;
 
 import lombok.Data;
-import me.comfortable_andy.discordstuff.Main;
+import me.comfortable_andy.discordstuff.DiscordStuffMain;
 import me.comfortable_andy.discordstuff.markdown.parser.MarkdownParser;
 import me.comfortable_andy.discordstuff.util.StringUtil;
 import org.bukkit.ChatColor;
@@ -76,7 +76,7 @@ public abstract class Markdown implements Comparable<Markdown> {
 
     public static MarkdownParser.Type getParser() {
         try {
-            return Optional.ofNullable(MarkdownParser.Type.find(Main.getInstance().getConfig().getString("parser", "fancy").toUpperCase())).orElse(MarkdownParser.Type.OFF);
+            return Optional.ofNullable(MarkdownParser.Type.find(DiscordStuffMain.getInstance().getConfig().getString("parser", "fancy").toUpperCase())).orElse(MarkdownParser.Type.OFF);
         } catch (IllegalArgumentException e) {
             return MarkdownParser.Type.FANCY;
         }
