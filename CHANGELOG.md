@@ -1,3 +1,8 @@
+# v2.8.1
+```diff
+~ Quick fix
+```
+
 # v2.8.0
 ```diff
 + Add emoji tab completion (redownloading now refreshes emojis for players)

@@ -145,7 +145,7 @@ jobs:
         uses: AndyNoob/hangar-upload-action@v1.0.1-url-output
         with:
           api_token: ${{ secrets.HANGAR_TOKEN }}
-          channel: 'release'
+          channel: 'Release'
           files: |
             [
               {
