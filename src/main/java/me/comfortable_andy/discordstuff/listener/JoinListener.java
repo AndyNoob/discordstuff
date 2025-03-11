@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.Collections;
 import java.util.List;
 
 public class JoinListener implements Listener {
@@ -19,7 +20,8 @@ public class JoinListener implements Listener {
         String ping = "@" + event.getPlayer().getName();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.hasPermission("discordstuff.ping.use"))
-                ReflectionUtil.ADD_COMPLETION.invoke(player, ping);
+                ReflectionUtil.ADD_COMPLETION.invoke(player, Collections.
+        singleton(ping));
         }
         final List<String> pings = Bukkit.getOnlinePlayers()
                 .stream()
