@@ -1,3 +1,9 @@
+# v2.8.0
+```diff
++ Add emoji tab completion (redownloading now refreshes emojis for players)
+~ Fix ping completion not being removed with player quits
+```
+
 # v2.7.2
 ```diff
 ~ minor fixes on markdown trigger matching in both parsers
