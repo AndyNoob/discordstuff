@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/markdown/**.java'
+jobs:
+  test:
+    if: ${{ github.event }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+      - name: "Set up java"
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu' # See 'Supported distributions' for available options
+          java-version: '21'
+          cache: gradle
+      - name: "Test"
+
