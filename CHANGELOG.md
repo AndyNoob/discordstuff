@@ -1,3 +1,8 @@
+# v2.7.2
+```diff
+~ minor fixes on markdown trigger matching in both parsers
+```
+
 # v2.7.1
 ```diff
 + Emoji downloading from https://emzi0767.mzgit.io/discord-emoji/
