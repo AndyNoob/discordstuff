@@ -1,9 +1,11 @@
+name: "Test Stuff"
+
 on:
   push:
     branches:
       - main
     paths:
-      - '**/markdown/**.java'
+      - '**/markdown/**'
 jobs:
   test:
     if: ${{ github.event }}
@@ -18,4 +20,5 @@ jobs:
           java-version: '21'
           cache: gradle
       - name: "Test"
+        run: ./gradlew test
 
