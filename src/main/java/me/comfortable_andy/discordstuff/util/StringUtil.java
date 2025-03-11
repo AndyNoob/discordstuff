@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 
 import java.lang.reflect.Field;
 
+@SuppressWarnings("deprecation")
 public class StringUtil {
 
     static {
@@ -35,7 +36,7 @@ public class StringUtil {
     }
 
     public static String charAt(String str, int index) {
-        return str.length() > index ? str.substring(index, index + 1) : "";
+        return index > 0 && str.length() > index ? str.substring(index, index + 1) : "";
     }
 
 }

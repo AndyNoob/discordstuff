@@ -44,14 +44,13 @@ public abstract class Markdown implements Comparable<Markdown> {
         final String markdownPattern = concatenate("|", StringUtil::regexEscape);
         boolean markdownBefore = StringUtil.backwardMatches(input, indexStart, false, markdownPattern);
         final boolean markdownAfter = StringUtil.forwardMatches(input, indexStart + delta, true, markdownPattern);
-        final boolean spaceBefore = StringUtil.backwardMatches(input, indexStart, false, "\\s");
-        final boolean spaceAfter =
-                StringUtil.forwardMatches(input, indexStart + delta, true, "\\s");
-        final boolean start = StringUtil.backwardMatches(input, indexStart, false, "^");
-        final boolean end = StringUtil.forwardMatches(input, indexStart + delta, true, "$");
-        if (start) {
+        String after = StringUtil.charAt(input, indexStart + delta);
+        String before = StringUtil.charAt(input, indexStart - 1);
+        final boolean spaceBefore = before.isEmpty() || before.matches("\\W");
+        final boolean spaceAfter = after.isEmpty() || after.matches("\\W");
+        if (indexStart == 0) {
             return !spaceAfter || markdownAfter;
-        } else if (end) {
+        } else if (indexStart == input.length() - 1) {
             return !spaceBefore || markdownBefore;
         } else if (spaceBefore) {
             return markdownAfter || !spaceAfter;

@@ -20,6 +20,7 @@ import static me.comfortable_andy.discordstuff.markdown.Markdown.concatenate;
  * - when a markdown trigger is found, the next closest trigger of the same
  *   is searched for and the text in between is parsed recursively
  */
+@SuppressWarnings("deprecation")
 public class DiscordParser extends MarkdownParser {
 
     @Override
@@ -46,6 +47,7 @@ public class DiscordParser extends MarkdownParser {
             }
 
             if (markdown == null || (markdown.isShouldTouchSpaceAndText() && !Markdown.spaceAndText(input, i, trigger.length()))) {
+                // advance
                 out.append(input, i, i + 1);
                 i++;
                 continue;
@@ -61,6 +63,7 @@ public class DiscordParser extends MarkdownParser {
                 if (markdown.isShouldTouchSpaceAndText() && !Markdown.spaceAndText(input, j, triggerLen)) {
                     continue;
                 }
+                if (triggerLen > 1 && lastFound == j + 1) continue;
                 lastFound = j;
             }
             if (lastFound == -1) {

@@ -28,7 +28,8 @@ dependencies {
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
     compileOnly(libs.org.projectlombok.lombok)
     annotationProcessor(libs.org.projectlombok.lombok)
-    testImplementation(libs.org.junit.jupiter.junit.jupiter)
+    testImplementation("org.junit.platform:junit-platform-launcher:1.12.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.0")
 }
 
 group = "me.comfortable_andy"
@@ -57,4 +58,8 @@ tasks.withType<ProcessResources> {
     filesMatching("plugin.yml") {
         expand(props)
     }
+}
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
 }
