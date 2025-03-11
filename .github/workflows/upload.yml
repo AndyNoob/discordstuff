@@ -130,6 +130,40 @@ jobs:
       - name: "Summary"
         run: |
           echo '[Modrinth URL](${{ steps.mc-publish.outputs.modrinth-url }})' >> $GITHUB_STEP_SUMMARY
+    outputs:
+      url: ${{ steps.mc-publish.outputs.modrinth-url }}
+  publish-hangar:
+    needs:
+      - check-commit
+      - build
+      - publish-modrinth
+    runs-on: ubuntu-latest
+    if: ${{ (needs.check-commit.outputs.new_ver != '') && (vars.HANGAR_ID != '') }}
+    steps:
+      - name: "Hangar Publish"
+        id: hangar-publish
+        uses: AndyNoob/hangar-upload-action@v1.0.1-url-output
+        with:
+          api_token: ${{ secrets.HANGAR_TOKEN }}
+          channel: 'release'
+          files: |
+            [
+              {
+                "platforms": ["PAPER"],
+                "url": true,
+                "externalUrl": "${{ needs.publish-modrinth.outputs.url }}"
+              }
+            ]
+          slug: ${{ vars.HANGAR_ID }}
+          version: ${{ needs.check-commit.outputs.new_ver }}
+          description: ${{ needs.check-commit.outputs.changelog }}
+          platform_dependencies: |
+            {
+              "PAPER": ["1.16.5-1.21"]
+            }
+      - name: "Summary"
+        run: |
+          echo '[Hangar URL](${{ steps.hangar-publish.outputs.url }})' >> $GITHUB_STEP_SUMMARY
   publish-curseforge:
     needs:
       - check-commit

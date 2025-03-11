@@ -3,6 +3,7 @@ package me.comfortable_andy.discordstuff.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -38,6 +39,28 @@ public class EmojiUtil {
 
     private static URL url;
 
+    public static void updateEmojiCompletions(boolean remove) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            updateEmojiCompletions(player, remove);
+        }
+    }
+
+    public static void updateEmojiCompletions(Player player, boolean remove) {
+        if (remove) {
+            try {
+                ReflectionUtil.REMOVE_COMPLETION.invoke(player, EMOJIS.keySet());
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            try {
+                ReflectionUtil.ADD_COMPLETION.invoke(player, EMOJIS.keySet());
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void loadEmojis(Plugin plugin) {
         File file = new File(plugin.getDataFolder(), EMOJI_FILE_NAME);
@@ -47,6 +70,7 @@ public class EmojiUtil {
             downloadEmojis(plugin, () -> loadEmojis(plugin));
             return;
         }
+        EmojiUtil.updateEmojiCompletions(true);
         EMOJIS.clear();
         try {
             FileReader reader = new FileReader(file);
@@ -67,6 +91,7 @@ public class EmojiUtil {
                 }
             }
             plugin.getLogger().info("Loaded " + EMOJIS.size() + " emoji definitions, purging " + (data.emojiDefinitions.size() - EMOJIS.size()) + " due to Minecraft client rendering limitations.");
+            updateEmojiCompletions(false);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
