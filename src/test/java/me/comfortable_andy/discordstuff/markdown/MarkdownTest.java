@@ -12,9 +12,10 @@ import org.bukkit.ChatColor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static org.bukkit.ChatColor.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("deprecation")
@@ -30,20 +31,21 @@ public class MarkdownTest {
 
     @Test
     public void testFancy() {
-        Map<String, String> inputExpected = new HashMap<>() {{
-            put("This is a **te~~st** of~~ *markdown* and ~~it's~~ __working__!", "This is a " + ChatColor.BOLD + "te" + ChatColor.STRIKETHROUGH + "st" + ChatColor.RESET + ChatColor.STRIKETHROUGH + " of" + ChatColor.RESET + " " + ChatColor.ITALIC + "markdown" + ChatColor.RESET + " and " + ChatColor.STRIKETHROUGH + "it's" + ChatColor.RESET + " " + ChatColor.UNDERLINE + "working" + ChatColor.RESET + "!");
+        Map<String, String> inputExpected = new LinkedHashMap<>() {{
+            put("This is a **te~~st** of~~ *markdown* and ~~it's~~ __working__!", "This is a " + BOLD + "te" + ChatColor.STRIKETHROUGH + "st" + RESET + ChatColor.STRIKETHROUGH + " of" + RESET + " " + ITALIC + "markdown" + RESET + " and " + ChatColor.STRIKETHROUGH + "it's" + RESET + " " + ChatColor.UNDERLINE + "working" + RESET + "!");
             put("1 * 2 * 3 = 6", "1 * 2 * 3 = 6");
-            put("**AHHH**", ChatColor.BOLD + "AHHH" + ChatColor.RESET);
+            put("**AHHH**", BOLD + "AHHH" + RESET);
             put("__", "__");
             put("~~", "~~");
             put("**", "**");
             put("*something", "*something");
-            put("__Re__**loaded**!", ChatColor.UNDERLINE + "Re" + ChatColor.RESET + ChatColor.BOLD + "loaded" + ChatColor.RESET + "!");
-            put("****", ChatColor.BOLD + "" + ChatColor.RESET);
+            put("__Re__**loaded**!", ChatColor.UNDERLINE + "Re" + RESET + BOLD + "loaded" + RESET + "!");
+            put("****", BOLD + "" + RESET);
             put("***", "***");
-            put("**sup " + ChatColor.RED + "you suck** boi", ChatColor.BOLD + "sup " + ChatColor.RED + "you suck" + ChatColor.RESET + ChatColor.RED + " boi");
-            put("_**hi Comfortable_Andy hi**_", ChatColor.ITALIC + "" + ChatColor.BOLD + "hi Comfortable_Andy hi" + ChatColor.RESET + "" + ChatColor.ITALIC + "" + ChatColor.RESET);
-            put("**_hi Comfortable_Andy hi_**", ChatColor.BOLD + "" + ChatColor.ITALIC + "hi Comfortable_Andy hi" + ChatColor.RESET + "" + ChatColor.BOLD + "" + ChatColor.RESET);
+            put("**sup " + ChatColor.RED + "you suck** boi", BOLD + "sup " + ChatColor.RED + "you suck" + RESET + ChatColor.RED + " boi");
+            put("_**hi Comfortable_Andy hi**_", ITALIC + "" + BOLD + "hi Comfortable_Andy hi" + RESET + ITALIC + RESET);
+            put("**_hi Comfortable_Andy hi_**", BOLD + "" + ITALIC + "hi Comfortable_Andy hi" + RESET + BOLD + RESET);
+            put("***hi***!", ("" + BOLD + ITALIC + "hi" + RESET + BOLD + RESET + "!"));
         }};
         for (Map.Entry<String, String> entry : inputExpected.entrySet()) {
             assertEquals(entry.getValue(), new FancyParser().parse(entry.getKey()));
@@ -52,20 +54,21 @@ public class MarkdownTest {
 
     @Test
     public void testDiscord() {
-        Map<String, String> inputExpected = new HashMap<>(){{
+        Map<String, String> inputExpected = new LinkedHashMap<>(){{
             put("1 * 2 * 3 = 6", "1 * 2 * 3 = 6");
-            put("**AHHH**", ChatColor.BOLD + "AHHH" + ChatColor.RESET);
-            put("This is a **te~~st** of ~~ *markdown* and ~~ it's~~ __working__!", "This is a " + ChatColor.BOLD + "te~~st" + ChatColor.RESET + " of " + ChatColor.STRIKETHROUGH + " " + ChatColor.ITALIC + "markdown" + ChatColor.RESET + ChatColor.STRIKETHROUGH + " and " + ChatColor.RESET + " it's~~ " + ChatColor.UNDERLINE + "working" + ChatColor.RESET + "!");
-            put("**sup " + ChatColor.RED + "you suck** boi", ChatColor.BOLD + "sup " + ChatColor.RED + "you suck" + ChatColor.RESET + ChatColor.RED + " boi");
-            put("**_hi Comfortable_Andy hi_**", ChatColor.BOLD + "" + ChatColor.ITALIC + "hi Comfortable_Andy hi" + ChatColor.RESET + "" + ChatColor.BOLD + "" + ChatColor.RESET);
+            put("**AHHH**", BOLD + "AHHH" + RESET);
+            put("This is a **te~~st** of ~~ *markdown* and ~~ it's~~ __working__!", "This is a " + BOLD + "te~~st" + RESET + " of " + ChatColor.STRIKETHROUGH + " " + ITALIC + "markdown" + RESET + ChatColor.STRIKETHROUGH + " and " + RESET + " it's~~ " + ChatColor.UNDERLINE + "working" + RESET + "!");
+            put("**sup " + ChatColor.RED + "you suck** boi", BOLD + "sup " + ChatColor.RED + "you suck" + RESET + ChatColor.RED + " boi");
+            put("**_hi Comfortable_Andy hi_**", BOLD + "" + ITALIC + "hi Comfortable_Andy hi" + RESET + BOLD + RESET);
             put("_hi_!", s("<i>hi</i>!"));
-            put("***hi***!", ("" + ChatColor.BOLD + ChatColor.ITALIC + "hi" + ChatColor.RESET + ChatColor.BOLD + ChatColor.RESET + "!"));
+            put("***hi***!", ("" + BOLD + ITALIC + "hi" + RESET + BOLD + RESET + "!"));
         }};
         for (Map.Entry<String, String> entry : inputExpected.entrySet()) {
             assertEquals(entry.getValue(), new DiscordParser().parse(entry.getKey()));
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private String s(String i) {
         return (LegacyComponentSerializer.legacySection().serialize(MiniMessage.miniMessage().deserialize(i)));
     }

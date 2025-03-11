@@ -9,6 +9,7 @@ import java.util.List;
 
 public class FancyParser extends MarkdownParser {
 
+    @SuppressWarnings("deprecation")
     @Override
     public String parse(final String input, boolean keepTriggers) {
         final Markdown[] markdowns = Markdown.getOrderedMarkdowns();
@@ -40,6 +41,7 @@ public class FancyParser extends MarkdownParser {
                     if (matched == null) {
                         incomplete.add(new MarkdownRegion(markdown, trigger, i));
                     } else {
+                        if (trigger.length() > 1 && i + 1 < input.length() && input.substring(i + 1).startsWith(trigger)) continue;
                         matched.setCompleted(true);
                         // current index is on the first character of the trigger
                         // so moving it forward by the length of the trigger will
