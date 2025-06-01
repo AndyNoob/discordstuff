@@ -33,7 +33,7 @@ dependencies {
 }
 
 group = "me.comfortable_andy"
-version = "2.8.1"
+version = "2.8.2"
 description = "discord-stuff"
 
 publishing {

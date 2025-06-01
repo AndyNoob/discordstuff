@@ -1,3 +1,8 @@
+# v2.8.2
+```diff
+~ Fix IllegalArgumentException on tab completion clean up
+```
+
 # v2.8.1
 ```diff
 ~ Quick fix
