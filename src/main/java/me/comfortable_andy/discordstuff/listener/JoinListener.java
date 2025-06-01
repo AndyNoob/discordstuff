@@ -21,7 +21,7 @@ public class JoinListener implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.hasPermission("discordstuff.ping.use"))
                 ReflectionUtil.ADD_COMPLETION.invoke(player, Collections.
-        singleton(ping));
+                        singleton(ping));
         }
         final List<String> pings = Bukkit.getOnlinePlayers()
                 .stream()
@@ -35,8 +35,10 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) throws ReflectiveOperationException {
         if (ReflectionUtil.REMOVE_COMPLETION == null) return;
+        List<String> names = List.of("@" + event.getPlayer().getName());
         for (Player player : Bukkit.getOnlinePlayers()) {
-            ReflectionUtil.REMOVE_COMPLETION.invoke(player, "@" + event.getPlayer().getName());
+            if (player == event.getPlayer()) continue;
+            ReflectionUtil.REMOVE_COMPLETION.invoke(player, names);
         }
     }
 

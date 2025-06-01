@@ -63,3 +63,9 @@ tasks.withType<ProcessResources> {
 tasks.named<Test>("test") {
     useJUnitPlatform()
 }
+
+tasks {
+    runServer {
+        minecraftVersion("1.21.5")
+    }
+}
